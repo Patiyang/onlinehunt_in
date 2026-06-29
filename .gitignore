@@ -1,0 +1,60 @@
+# OS / Editor junk
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.bak
+*.tmp
+
+# Composer dependencies
+/vendor/
+composer.lock
+
+# Node dependencies (if using npm/yarn for assets)
+/node_modules/
+package-lock.json
+yarn.lock
+
+# Environment files
+.env
+.env.*
+
+# Ignore everything in writable
+writable/*
+
+# Keep the directory structure
+!writable/cache/
+!writable/logs/
+!writable/session/
+!writable/uploads/
+!writable/debugbar/
+
+# Ignore everything inside those directories
+writable/cache/*
+writable/logs/*
+writable/session/*
+writable/uploads/*
+writable/debugbar/*
+
+# But keep a placeholder file
+!writable/cache/.gitkeep
+!writable/logs/.gitkeep
+!writable/session/.gitkeep
+!writable/uploads/.gitkeep
+!writable/debugbar/.gitkeep
+
+
+# /app/Config/Database.php
+#uploads folder
+# Ignore everything inside uploads
+uploads/**
+
+# But keep everything in the root of uploads
+!uploads/*
+
+# Ignore the contents of any subdirectories
+uploads/*/**
+# IDE & misc
+.idea/
+.vscode/
+nbproject/
