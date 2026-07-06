@@ -59,6 +59,8 @@ class CategoryController extends ResourceController
                 'image_url'     => $row->image_url,
                 'created_at'    => $row->created_at,
                 'pageviews'     => (int)$row->pageviews,
+                'video_id'      => $row->video_id == null ? null : (int)$row->video_id,
+                'video_url'     => $row->video_url ?? null,
                 'comment_count' => (int)$row->comment_count,
                 'author'        => [
                     'id'          => (int)$row->user_id,
@@ -135,13 +137,13 @@ class CategoryController extends ResourceController
     {
         $limit = (int) ($this->request->getGet('limit') ?? 10);
         $page  = (int) ($this->request->getGet('page') ?? 1);
-                $lang_id = (int) ($this->request->getGet('lang_id') ?? 1);
-
+        $lang_id = (int) ($this->request->getGet('lang_id') ?? 1);
+        $is_video = $this->request->getGet('is_video') ? (bool)$this->request->getGet('is_video') : null;
         $offset = ($page - 1) * $limit;
 
         $filters = $this->parseFilters();
 
-        $category = $this->categoryMobileModel->getCategoryById($id, $limit, $offset, $lang_id);
+        $category = $this->categoryMobileModel->getCategoryById($id, $limit, $offset, $lang_id, $is_video);
 
         if (!$category) {
             return $this->failNotFound('Category not found');

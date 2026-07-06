@@ -16,7 +16,7 @@ class PostMobileModel extends Model
     {
         $builder = $this->db->table('posts p')
             ->select('p.id, p.title, p.slug, p.summary, p.content, p.meta_keywords,
-                  p.pageviews, p.comment_count, p.image_url, p.created_at,
+                  p.pageviews,p.video_id,p.video_url, p.comment_count, p.image_url, p.created_at,
                   u.id as user_id, u.username, u.slug as user_slug, u.email, 
                   u.avatar, u.cover_image, u.about_me, u.last_seen,
                   c.id as category_id, c.name as category_name, c.slug as category_slug, 
@@ -68,11 +68,11 @@ class PostMobileModel extends Model
             ->getRow();
     }
 
-    public function getPostsByCategory($categoryId, $limit = 10, $offset = 0, $langId = null)
+    public function getPostsByCategory($categoryId, $limit = 10, $offset = 0, $langId = null, $isVideo = null)
     {
         $builder = $this->db->table('posts p')
             ->select('p.id, p.title, p.slug, p.summary, p.content, p.meta_keywords,
-                  p.pageviews, p.comment_count, p.image_url, p.created_at,
+                  p.pageviews,p.video_id,p.video_url, p.comment_count, p.image_url, p.created_at,
                   u.id as user_id, u.username, u.slug as user_slug, u.email, u.avatar,
                   u.cover_image, u.about_me, u.last_seen,
                   c.id as category_id, c.name as category_name, c.slug as category_slug, c.description as category_description')
@@ -85,7 +85,9 @@ class PostMobileModel extends Model
         if (!is_null($langId)) {
             $builder->where('c.lang_id', $langId);
         }
-
+        if ($isVideo) {
+            $builder->where('p.video_id IS NOT NULL', null, false);
+        }
         // count total
         $total = $builder->countAllResults(false);
 
@@ -111,11 +113,11 @@ class PostMobileModel extends Model
 
 
 
-    public function getPostsBySelection($type, $limit = 10, $offset = 0, $langId = null)
+    public function getPostsBySelection($type, $limit = 10, $offset = 0, $langId = null, $isVideo = null)
     {
         $builder = $this->db->table('posts p')
             ->select('p.id, p.title, p.slug, p.summary, p.content, p.meta_keywords,
-                  p.pageviews, p.comment_count, p.image_url, p.created_at,
+                  p.pageviews,p.video_id,p.video_url, p.comment_count, p.image_url, p.created_at,
                   u.id as user_id, u.username, u.slug as user_slug, u.email, 
                   u.avatar, u.cover_image, u.about_me, u.last_seen,
                   c.id as category_id, c.name as category_name, c.slug as category_slug, 
@@ -130,6 +132,13 @@ class PostMobileModel extends Model
         if (!is_null($langId)) {
             $builder->where('c.lang_id', $langId);
         }
+        if ($isVideo) {
+            $builder->where('p.video_id IS NOT NULL', null, false);
+        } 
+        
+        // else {
+        //     $builder->where('p.video_id IS NULL', null, false);
+        // }
 
         // count total
         $total = $builder->countAllResults(false);
@@ -147,7 +156,7 @@ class PostMobileModel extends Model
                 'limit'    => $limit,
                 'offset'   => $offset,
                 'lang_id' => $langId,
-
+                'is_video' => $isVideo,
                 'page'     => floor($offset / $limit) + 1,
                 'pages'    => ceil($total / $limit),
             ]
@@ -158,7 +167,7 @@ class PostMobileModel extends Model
     {
         return $this->db->table('posts p')
             ->select('p.id, p.title, p.slug, p.summary, p.content, p.meta_keywords as keywords,
-                  p.pageviews, p.comment_count, p.image_url, p.created_at,
+                  p.pageviews,p.video_id,p.video_url, p.comment_count, p.image_url, p.created_at,
                   u.id as user_id, u.username, u.slug as user_slug, u.email, u.avatar,
                   u.cover_image, u.about_me, u.last_seen,
                   c.id as category_id, c.name as category_name, c.slug as category_slug, c.description as category_description')

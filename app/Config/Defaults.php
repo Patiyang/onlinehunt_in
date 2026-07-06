@@ -320,6 +320,7 @@ class Defaults extends BaseConfig
     public static array $rolePermissions = [
         'admin_panel',
         'add_post',
+        'add_live',
         'manage_all_posts',
         'navigation',
         'pages',

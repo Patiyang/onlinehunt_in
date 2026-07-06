@@ -135,7 +135,16 @@
                 </a>
             </div>
         <?php endif; ?>
-
+        <?php if (hasPermission('add_live')): ?>
+            <div class="menu-item">
+                <a class="menu-link" href="<?= adminUrl('live-news'); ?>">
+                    <span class="menu-icon">
+                        <i class="ki-duotone ki-category fs-2"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></i>
+                    </span>
+                    <span class="menu-title">Live news</span>
+                </a>
+            </div>
+        <?php endif; ?>
         <?php if (hasPermission('categories')): ?>
             <div class="menu-item">
                 <a class="menu-link" href="<?= adminUrl('categories'); ?>">

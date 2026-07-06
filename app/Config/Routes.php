@@ -134,6 +134,12 @@ $routes->group($customRoutes->admin, ['filter' => 'auth'], function ($routes) {
     $routes->match(['GET', 'POST'], 'rss-feeds/add', 'RssController::addFeed');
     $routes->match(['GET', 'POST'], 'rss-feeds/edit/(:num)', 'RssController::editFeed/$1');
 
+    //LIVE news
+    $routes->get('live-news', 'LiveNewsController::liveNews');
+    $routes->match(['GET', 'POST'], 'live-news/add', 'LiveNewsController::addLiveNews');
+    $routes->match(['GET', 'POST'], 'live-news/edit/(:num)', 'LiveNewsController::editLiveNews/$1');
+
+
     // Categories
     $routes->get('categories', 'CategoryController::categories');
     $routes->match(['GET', 'POST'], 'categories/add', 'CategoryController::addCategory');
@@ -292,6 +298,8 @@ $routes->group('', ['filter' => 'ajax'], function ($routes) {
 
     // RSS
     $routes->post('Rss/deleteFeed', 'RssController::deleteFeed');
+    $routes->post('LiveNews/deleteFeed', 'LiveNewsController::deleteFeed');
+
 });
 
 // Comments
@@ -417,6 +425,9 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
 
     $routes->post('auth/login', 'AuthController::login');
     $routes->post('auth/signup', 'AuthController::signup');
+
+    //Live News
+    $routes->get('live-news', 'LiveNewsController::index'); // ?limit=10&offset=0&lang_id=1
 });
 /*
  * --------------------------------------------------------------------
