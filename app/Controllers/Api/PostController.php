@@ -62,7 +62,9 @@ class PostController extends BaseController
                     'id'          => (int)$row->category_id,
                     'name'        => $row->category_name,
                     'slug'        => $row->category_slug,
-                    'description' => $row->category_description
+                    'description' => $row->category_description,
+                    'color'=>$row->color,
+                    'meta_title'=>$row->meta_title
                 ]
             ];
 

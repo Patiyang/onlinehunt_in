@@ -20,7 +20,7 @@ class PostMobileModel extends Model
                   u.id as user_id, u.username, u.slug as user_slug, u.email, 
                   u.avatar, u.cover_image, u.about_me, u.last_seen,
                   c.id as category_id, c.name as category_name, c.slug as category_slug, 
-                  c.description as category_description')
+                  c.description as category_description,c.meta_title, c.color')
             ->join('users u', 'u.id = p.user_id', 'left')
             ->join('categories c', 'c.id = p.category_id', 'left')
             ->where('p.status', 1)
@@ -57,7 +57,7 @@ class PostMobileModel extends Model
     {
         return $this->select('p.*, 
                               u.id as user_id, u.username, u.slug as user_slug, u.email, u.avatar, u.cover_image, u.about_me, u.last_seen,
-                              c.id as category_id, c.name as category_name, c.slug as category_slug, c.description as category_description')
+                              c.id as category_id, c.name as category_name, c.slug as category_slug, c.description as category_description, c.meta_title, c.color')
             ->from('posts p')
             ->join('users u', 'u.id = p.user_id', 'left')
             ->join('categories c', 'c.id = p.category_id', 'left')
@@ -75,7 +75,7 @@ class PostMobileModel extends Model
                   p.pageviews,p.video_id,p.video_url, p.comment_count, p.image_url, p.created_at,
                   u.id as user_id, u.username, u.slug as user_slug, u.email, u.avatar,
                   u.cover_image, u.about_me, u.last_seen,
-                  c.id as category_id, c.name as category_name, c.slug as category_slug, c.description as category_description')
+                  c.id as category_id, c.name as category_name, c.slug as category_slug, c.description as category_description, c.meta_title, c.color')
             ->join('users u', 'u.id = p.user_id', 'left')
             ->join('categories c', 'c.id = p.category_id', 'left')
             ->where('p.status', 1)
@@ -121,7 +121,7 @@ class PostMobileModel extends Model
                   u.id as user_id, u.username, u.slug as user_slug, u.email, 
                   u.avatar, u.cover_image, u.about_me, u.last_seen,
                   c.id as category_id, c.name as category_name, c.slug as category_slug, 
-                  c.description as category_description')
+                  c.description as category_description, c.meta_title, c.color')
             ->join('post_selections ps', 'ps.post_id = p.id')
             ->join('users u', 'u.id = p.user_id', 'left')
             ->join('categories c', 'c.id = p.category_id', 'left')
@@ -135,7 +135,7 @@ class PostMobileModel extends Model
         if ($isVideo) {
             $builder->where('p.video_id IS NOT NULL', null, false);
         } 
-        
+        // c.meta_title,c.color,
         // else {
         //     $builder->where('p.video_id IS NULL', null, false);
         // }
@@ -170,7 +170,7 @@ class PostMobileModel extends Model
                   p.pageviews,p.video_id,p.video_url, p.comment_count, p.image_url, p.created_at,
                   u.id as user_id, u.username, u.slug as user_slug, u.email, u.avatar,
                   u.cover_image, u.about_me, u.last_seen,
-                  c.id as category_id, c.name as category_name, c.slug as category_slug, c.description as category_description')
+                  c.id as category_id, c.name as category_name, c.slug as category_slug, c.description as category_description, c.meta_title, c.color')
             ->join('users u', 'u.id = p.user_id', 'left')
             ->join('categories c', 'c.id = p.category_id', 'left')
             ->where('p.status', 1)

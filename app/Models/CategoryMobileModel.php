@@ -16,7 +16,7 @@ class CategoryMobileModel extends Model
     public function getCategories($limit = 10, $offset = 0, $langId = null)
     {
         $builder = $this->db->table('categories c')
-            ->select('c.id,c.status,c.lang_id, c.name, c.slug, c.description')
+            ->select('c.id,c.status,c.lang_id,c.meta_title,c.color, c.name, c.slug, c.description')
             ->where('c.status', 1) // only active categories
             ->orderBy('c.name', 'ASC');
 
@@ -56,7 +56,7 @@ class CategoryMobileModel extends Model
     public function getCategoryById($id, $limit = 10, $offset = 0, $langId = null, $isVideo = null)
     {
         $builder = $this->db->table('categories c')
-            ->select('c.id,c.status,c.lang_id, c.name, c.slug, c.description')
+            ->select('c.id,c.status,c.lang_id,c.meta_title,c.color, c.name, c.slug, c.description')
             ->where('c.id', $id);
 
         if (!is_null($langId)) {
@@ -116,7 +116,7 @@ class CategoryMobileModel extends Model
     public function getCategoryBySlug($slug, $limit = 10, $offset = 0, $langId = null)
     {
         $builder = $this->db->table('categories c')
-            ->select('c.id,c.status,c.lang_id, c.name, c.slug, c.description')
+            ->select('c.id,c.status,c.lang_id,c.meta_title,c.color, c.name, c.slug, c.description')
             ->where('c.slug', $slug);
 
         if (!is_null($langId)) {
