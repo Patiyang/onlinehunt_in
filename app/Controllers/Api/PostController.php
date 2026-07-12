@@ -63,8 +63,8 @@ class PostController extends BaseController
                     'name'        => $row->category_name,
                     'slug'        => $row->category_slug,
                     'description' => $row->category_description,
-                    'color'=>$row->color,
-                    'meta_title'=>$row->meta_title
+                    'color' => $row->color,
+                    'meta_title' => $row->meta_title
                 ]
             ];
 
@@ -161,7 +161,19 @@ class PostController extends BaseController
             'data'   => $this->formatPosts([$row], $filters)[0]
         ]);
     }
+    public function share($id = null)
+    {
 
+        // return "Post ID: " . $id;
+        $post = $this->postMobileModel->getPostById($id);
+
+        if (!$post) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+        return view('deeplink/post', [
+            'post' => $post
+        ]);
+    }
     public function byCategory($categoryId = null)
     {
         if (!$categoryId || !is_numeric($categoryId)) {

@@ -299,7 +299,6 @@ $routes->group('', ['filter' => 'ajax'], function ($routes) {
     // RSS
     $routes->post('Rss/deleteFeed', 'RssController::deleteFeed');
     $routes->post('LiveNews/deleteFeed', 'LiveNewsController::deleteFeed');
-
 });
 
 // Comments
@@ -404,31 +403,7 @@ foreach ($postRoutesArray as $item) {
 }
 //flutter routes
 
-$routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes) {
-    // Categories
-    $routes->get('categories', 'CategoryController::index'); // ?limit=10&offset=0&lang_id=1
-    $routes->get('categories/(:num)', 'CategoryController::show/$1'); // ?lang_id=1
-    $routes->get('categories/slug/(:segment)', 'CategoryController::bySlug/$1'); // ?lang_id=1
 
-    // Posts
-    $routes->get('posts', 'PostController::index'); // ?limit=10&offset=0
-    $routes->get('posts/(:num)', 'PostController::show/$1');
-    $routes->get('posts/selection/(:segment)', 'PostController::bySelection/$1'); // ?limit=10&offset=0
-    $routes->get('posts/category/(:num)', 'PostController::byCategory/$1');
-    // Similar posts
-    $routes->get('posts/(:num)/similar', 'PostController::similar/$1');
-
-    // Page views
-    $routes->post('posts/(:num)/pageview', 'PostController::addPageview/$1');
-
-    //login+reg
-
-    $routes->post('auth/login', 'AuthController::login');
-    $routes->post('auth/signup', 'AuthController::signup');
-
-    //Live News
-    $routes->get('live-news', 'LiveNewsController::index'); // ?limit=10&offset=0&lang_id=1
-});
 /*
  * --------------------------------------------------------------------
  * Dynamic Routes
@@ -482,6 +457,37 @@ if (!empty($languages)) {
         }
     }
 }
+
+$routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes) {
+    // Categories
+    $routes->get('categories', 'CategoryController::index'); // ?limit=10&offset=0&lang_id=1
+    $routes->get('categories/(:num)', 'CategoryController::show/$1'); // ?lang_id=1
+    $routes->get('categories/slug/(:segment)', 'CategoryController::bySlug/$1'); // ?lang_id=1
+
+    // Posts
+    $routes->get('posts', 'PostController::index'); // ?limit=10&offset=0
+    // $routes->get('posts/(:num)', 'PostController::show/$1');
+    $routes->get('posts/selection/(:segment)', 'PostController::bySelection/$1'); // ?limit=10&offset=0
+    $routes->get('posts/category/(:num)', 'PostController::byCategory/$1');
+    // Similar posts
+    $routes->get('posts/(:num)/similar', 'PostController::similar/$1');
+
+    // Page views
+    $routes->post('posts/(:num)/pageview', 'PostController::addPageview/$1');
+
+    //login+reg
+
+    $routes->post('auth/login', 'AuthController::login');
+    $routes->post('auth/signup', 'AuthController::signup');
+
+    //Live News
+    $routes->get('live-news', 'LiveNewsController::index'); // ?limit=10&offset=0&lang_id=1
+    $routes->get('share/(:num)', 'PostController::share/$1'); // ?lang_id=1
+});   
+
+// $routes->get('test', 'HomeController::test');
+$routes->get('share/(:num)', 'DeepLinkController::show/$1');
+$routes->get('test', 'DeepLinkController::test');
 
 $routes->match(['GET', 'HEAD'], '(:any)/(:any)/(:any)', 'HomeController::error404');
 $routes->match(['GET', 'HEAD'], '(:any)/(:any)', 'HomeController::subCategory/$1/$2');
