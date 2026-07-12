@@ -482,12 +482,12 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
 
     //Live News
     $routes->get('live-news', 'LiveNewsController::index'); // ?limit=10&offset=0&lang_id=1
-    $routes->get('share/(:num)', 'PostController::share/$1'); // ?lang_id=1
+    // $routes->get('share/(:num)', 'PostController::share/$1'); // ?lang_id=1
 });   
 
 // $routes->get('test', 'HomeController::test');
-$routes->get('share/(:num)', 'DeepLinkController::show/$1');
-$routes->get('test', 'DeepLinkController::test');
+// $routes->get('share/(:num)', 'DeepLinkController::show/$1');
+// $routes->get('test', 'DeepLinkController::test');
 
 $routes->match(['GET', 'HEAD'], '(:any)/(:any)/(:any)', 'HomeController::error404');
 $routes->match(['GET', 'HEAD'], '(:any)/(:any)', 'HomeController::subCategory/$1/$2');

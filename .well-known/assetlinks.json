@@ -1,0 +1,9 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.onlinehunt.app",
+    "sha256_cert_fingerprints":
+    ["07:6E:1E:59:4A:21:37:5C:F6:6C:6A:F1:7F:1B:3D:FF:6E:BC:E4:F8:B3:01:CC:EF:D3:92:4B:AB:58:D7:31:38"]
+  }
+}]
