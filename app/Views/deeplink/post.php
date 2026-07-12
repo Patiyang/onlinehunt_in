@@ -72,7 +72,7 @@
             // Fallback: redirect to website if app doesn't open after 2 seconds
             setTimeout(() => {
                 console.log('[DeepLink] App not opened, redirecting to fallback website');
-                window.location.replace("https://onlinehunt.in.local/<?= $post->slug ?>");
+                window.location.replace("https://onlinehunt.in/<?= $post->slug ?>");
                 // window.location.replace("http://onlinehunt.in.local/<?= $post->slug ?>");
             }, 8000);
 
