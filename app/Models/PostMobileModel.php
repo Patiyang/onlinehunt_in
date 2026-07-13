@@ -67,7 +67,20 @@ class PostMobileModel extends Model
             ->get()
             ->getRow();
     }
-
+ public function getPostBySlug($slug)
+    {
+        return $this->select('p.*, 
+                              u.id as user_id, u.username, u.slug as user_slug, u.email, u.avatar, u.cover_image, u.about_me, u.last_seen,
+                              c.id as category_id, c.name as category_name, c.slug as category_slug, c.description as category_description, c.meta_title, c.color')
+            ->from('posts p')
+            ->join('users u', 'u.id = p.user_id', 'left')
+            ->join('categories c', 'c.id = p.category_id', 'left')
+            ->where('p.status', 1)
+            ->where('p.visibility', 1)
+            ->where('p.slug', $slug)
+            ->get()
+            ->getRow();
+    }
     public function getPostsByCategory($categoryId, $limit = 10, $offset = 0, $langId = null, $isVideo = null)
     {
         $builder = $this->db->table('posts p')

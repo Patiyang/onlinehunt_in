@@ -161,6 +161,20 @@ class PostController extends BaseController
             'data'   => $this->formatPosts([$row], $filters)[0]
         ]);
     }
+    public function showBySlug($slug = null)
+    {
+        $row = $this->postMobileModel->getPostBySlug($slug);
+        if (!$row) {
+            return $this->failNotFound("Post with slug {$slug} not found");
+        }
+
+        $filters = $this->parseFilters(false);
+
+        return $this->respond([
+            'status' => 'success',
+            'data'   => $this->formatPosts([$row], $filters)[0]
+        ]);
+    }
     public function share($id = null)
     {
 

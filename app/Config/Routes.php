@@ -466,7 +466,7 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
 
     // Posts
     $routes->get('posts', 'PostController::index'); // ?limit=10&offset=0
-    // $routes->get('posts/(:num)', 'PostController::show/$1');
+    $routes->get('posts/(:segment)', 'PostController::showBySlug/$1');
     $routes->get('posts/selection/(:segment)', 'PostController::bySelection/$1'); // ?limit=10&offset=0
     $routes->get('posts/category/(:num)', 'PostController::byCategory/$1');
     // Similar posts
