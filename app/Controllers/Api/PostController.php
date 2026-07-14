@@ -19,7 +19,7 @@ class PostController extends BaseController
     public function __construct()
     {
         $this->postMobileModel = new PostMobileModel();
-        $this->pageViewModel   = new PageViewModel();
+        $this->pageViewModel  = new PageViewModel();
     }
 
     private function formatPosts($rows, array $options = [])
