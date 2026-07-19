@@ -138,8 +138,20 @@ $routes->group($customRoutes->admin, ['filter' => 'auth'], function ($routes) {
     $routes->get('live-news', 'LiveNewsController::liveNews');
     $routes->match(['GET', 'POST'], 'live-news/add', 'LiveNewsController::addLiveNews');
     $routes->match(['GET', 'POST'], 'live-news/edit/(:num)', 'LiveNewsController::editLiveNews/$1');
+    //publications
+    $routes->get('publications', 'PublicationController::publications');
+    $routes->match(['GET', 'POST'], 'publications/add', 'PublicationController::addPublication');
+    $routes->match(['GET', 'POST'], 'publications/edit/(:num)', 'PublicationController::editPublication/$1');
+    $routes->post('publications/delete', 'PublicationController::deletePublication');
+    //Epapers
+    $routes->get('publications/(:num)/issues', 'EpaperController::issues/$1');
+    $routes->match(['get', 'post'], 'publications/(:num)/issues/add', 'EpaperController::addIssue/$1');
+    $routes->match(['get', 'post'],'issues/edit/(:num)','EpaperController::editIssue/$1');
 
-
+    $routes->post('issues/delete', 'EpaperController::deleteIssue');
+    // $routes->get('epapers/(:num)', 'EpaperController::epaperNews/$1');
+    // $routes->match(['GET', 'POST'], 'epapers/add', 'EpaperController::addEpaperNews');
+    // $routes->match(['GET', 'POST'], 'epaper-news/edit/(:num)', 'EpaperController::editEpaperNews/$1');
     // Categories
     $routes->get('categories', 'CategoryController::categories');
     $routes->match(['GET', 'POST'], 'categories/add', 'CategoryController::addCategory');
@@ -485,7 +497,7 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
     // $routes->get('share/(:num)', 'PostController::share/$1'); // ?lang_id=1
     $routes->get('media', 'MediaController::index');
     $routes->get('media/(:num)', 'MediaController::show/$1');
-});   
+});
 
 // $routes->get('test', 'HomeController::test');
 // $routes->get('share/(:num)', 'DeepLinkController::show/$1');

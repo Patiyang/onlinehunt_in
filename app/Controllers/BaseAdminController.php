@@ -37,7 +37,9 @@ abstract class BaseAdminController extends Controller
      * @var array
      */
     protected $helpers = [
-        'text', 'security', 'ui'
+        'text',
+        'security',
+        'ui'
     ];
 
     public $session;
@@ -184,9 +186,28 @@ abstract class BaseAdminController extends Controller
 
                 // Delete incomplete orders
                 model('OrderModel')->deleteOldIncompleteOrders();
-
             } catch (\Exception $e) {
             }
         }
+    }
+    protected function uploadFile(string $field, string $folder): ?string
+    {
+        $file = $this->request->getFile($field);
+
+        if (!$file || !$file->isValid() || $file->hasMoved()) {
+            return null;
+        }
+
+        $uploadFolder = FCPATH . 'uploads/' . trim($folder, '/') . '/' . date('Ym');
+
+        if (!is_dir($uploadFolder)) {
+            mkdir($uploadFolder, 0755, true);
+        }
+
+        $newName = $file->getRandomName();
+
+        $file->move($uploadFolder, $newName);
+
+        return 'uploads/' . trim($folder, '/') . '/' . date('Ym') . '/' . $newName;
     }
 }

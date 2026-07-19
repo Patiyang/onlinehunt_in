@@ -3,17 +3,6 @@
 
 <?php
 $selectedLangId = old('lang_id') ?? $live?->lang_id ?? $activeLang?->id ?? 1;
-// $imageSavingMethod = !empty($feed) ? $feed->image_saving_method : 'url';
-// $autoUpdate = !empty($feed) ? (int)$feed->auto_update : 1;
-// $readMoreButton = !empty($feed) ? (int)$feed->read_more_button : 1;
-// $addPostsAsDraft = !empty($feed) ? (int)$feed->add_posts_as_draft : 0;
-// $generateKeywordsFromTitle = !empty($feed) ? (int)$feed->generate_keywords_from_title : 0;
-
-// $defaultImgId = !empty($defaultImage) ? (int)$defaultImage->id : 0;
-// $defaultImgUrl = '';
-// if (!empty($defaultImage)) {
-//     $defaultImgUrl = getStorageFileUrl($defaultImage->image_mid, $defaultImage->storage);
-// }
 ?>
 
 <form action="<?= $action ?>" method="post" id="form-post" class="form kt-form d-flex flex-column flex-xl-row gap-5 gap-xl-7 gap-xxl-10 mb-5 mb-xl-7 mb-xxl-10">

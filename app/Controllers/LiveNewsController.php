@@ -12,7 +12,7 @@ class LiveNewsController extends BaseAdminController
     {
         parent::initController($request, $response, $logger);
 
-        checkPermission('live_news');
+        checkPermission('live');
 
         // $this->liveNewsService = new LiveNewsService();
         $this->liveNewsModel = model('LiveNewsModel');
@@ -96,7 +96,7 @@ class LiveNewsController extends BaseAdminController
             'live'           => $live
         ]);
     }
-        /**
+    /**
      * AJAX Endpoint: Delete Feed
      *
      * @method POST

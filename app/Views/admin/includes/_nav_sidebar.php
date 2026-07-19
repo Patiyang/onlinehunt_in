@@ -135,13 +135,21 @@
                 </a>
             </div>
         <?php endif; ?>
-        <?php if (hasPermission('add_live')): ?>
+        <?php if (hasPermission('live')): ?>
             <div class="menu-item">
                 <a class="menu-link" href="<?= adminUrl('live-news'); ?>">
                     <span class="menu-icon">
-                        <i class="ki-duotone ki-category fs-2"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></i>
-                    </span>
+                        <i class="fa-solid fa-video"></i> </span>
                     <span class="menu-title">Live news</span>
+                </a>
+            </div>
+        <?php endif; ?>
+        <?php if (hasPermission('epaper')): ?>
+            <div class="menu-item">
+                <a class="menu-link" href="<?= adminUrl('publications'); ?>">
+                    <span class="menu-icon">
+                        <i class="fa-solid fa-newspaper"></i> </span>
+                    <span class="menu-title">Publications</span>
                 </a>
             </div>
         <?php endif; ?>
@@ -149,7 +157,7 @@
             <div class="menu-item">
                 <a class="menu-link" href="<?= adminUrl('categories'); ?>">
                     <span class="menu-icon">
-                       <i class="ki-duotone ki-category fs-2"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></i>
+                        <i class="ki-duotone ki-category fs-2"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></i>
                     </span>
                     <span class="menu-title"><?= trans("categories"); ?></span>
                 </a>
@@ -202,9 +210,9 @@
         <?php if (hasPermission('add_post')): ?>
             <div class="menu-item">
                 <a class="menu-link" href="<?= adminUrl('media'); ?>">
-                <span class="menu-icon">
-                    <i class="ki-duotone ki-picture fs-2"><span class="path1"></span><span class="path2"></span></i>
-                </span>
+                    <span class="menu-icon">
+                        <i class="ki-duotone ki-picture fs-2"><span class="path1"></span><span class="path2"></span></i>
+                    </span>
                     <span class="menu-title"><?= trans("media"); ?></span>
                 </a>
             </div>
@@ -285,8 +293,10 @@
             </div>
         <?php endif; ?>
 
-        <?php if (hasPermission('premium_membership') || hasPermission('reward_system') || hasPermission('ad_spaces')
-                || ($config->reward_system_status == 1 && user()->reward_system == 1)): ?>
+        <?php if (
+            hasPermission('premium_membership') || hasPermission('reward_system') || hasPermission('ad_spaces')
+            || ($config->reward_system_status == 1 && user()->reward_system == 1)
+        ): ?>
             <div class="menu-item pt-4">
                 <div class="menu-content">
                     <span class="menu-heading text-uppercase fs-7">
@@ -391,9 +401,9 @@
         <?php if (hasPermission('users') || hasPermission('roles_permissions')): ?>
             <div class="menu-item pt-4">
                 <div class="menu-content">
-                <span class="menu-heading text-uppercase fs-7">
-                    <?= trans("users_and_permissions"); ?>
-                </span>
+                    <span class="menu-heading text-uppercase fs-7">
+                        <?= trans("users_and_permissions"); ?>
+                    </span>
                 </div>
             </div>
         <?php endif; ?>
@@ -450,9 +460,9 @@
         <?php if (hasPermission('seo_tools') || hasPermission('google_news') || hasPermission('storage') || hasPermission('cache_system')): ?>
             <div class="menu-item pt-4">
                 <div class="menu-content">
-                <span class="menu-heading text-uppercase fs-7">
-                    <?= trans("system_tools"); ?>
-                </span>
+                    <span class="menu-heading text-uppercase fs-7">
+                        <?= trans("system_tools"); ?>
+                    </span>
                 </div>
             </div>
         <?php endif; ?>
@@ -514,13 +524,13 @@
 
             <?php if (hasPermission('security')): ?>
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-                <span class="menu-link">
-                    <span class="menu-icon">
-                        <i class="ki-duotone ki-shield-tick fs-2"><span class="path1"></span><span class="path2"></span></i>
+                    <span class="menu-link">
+                        <span class="menu-icon">
+                            <i class="ki-duotone ki-shield-tick fs-2"><span class="path1"></span><span class="path2"></span></i>
+                        </span>
+                        <span class="menu-title"><?= trans("security"); ?></span>
+                        <span class="menu-arrow"></span>
                     </span>
-                    <span class="menu-title"><?= trans("security"); ?></span>
-                    <span class="menu-arrow"></span>
-                </span>
                     <div class="menu-sub menu-sub-accordion">
                         <div class="menu-item">
                             <a class="menu-link" href="<?= adminUrl('security/settings'); ?>">
@@ -540,13 +550,13 @@
 
             <?php if (hasPermission('settings')): ?>
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion mb-10">
-                <span class="menu-link">
-                    <span class="menu-icon">
-                         <i class="ki-duotone ki-setting fs-2"><span class="path1"></span><span class="path2"></span></i>
+                    <span class="menu-link">
+                        <span class="menu-icon">
+                            <i class="ki-duotone ki-setting fs-2"><span class="path1"></span><span class="path2"></span></i>
+                        </span>
+                        <span class="menu-title"><?= trans("settings"); ?></span>
+                        <span class="menu-arrow"></span>
                     </span>
-                    <span class="menu-title"><?= trans("settings"); ?></span>
-                    <span class="menu-arrow"></span>
-                </span>
                     <div class="menu-sub menu-sub-accordion">
                         <div class="menu-item">
                             <a class="menu-link" href="<?= adminUrl('global-settings'); ?>">
@@ -613,7 +623,7 @@
 </div>
 
 <script>
-    (function () {
+    (function() {
         "use strict";
 
         function removeTrailingSlash(str) {
@@ -627,7 +637,7 @@
             length: 0
         };
 
-        menuLinks.forEach(function (link) {
+        menuLinks.forEach(function(link) {
             var href = link.getAttribute('href');
             if (!href || href.indexOf('javascript:') > -1 || href === '#') {
                 return;
@@ -639,8 +649,7 @@
 
             var linkUrlToCompare = removeTrailingSlash(href);
             var browserUrlToCompare = removeTrailingSlash(rawCurrentUrl);
-            if (linkUrlToCompare.indexOf('?') > -1) {
-            } else {
+            if (linkUrlToCompare.indexOf('?') > -1) {} else {
                 linkUrlToCompare = linkUrlToCompare.split(/[?#]/)[0];
                 browserUrlToCompare = browserUrlToCompare.split(/[?#]/)[0];
             }

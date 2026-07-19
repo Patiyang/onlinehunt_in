@@ -91,7 +91,7 @@
             </table>
         </div>
 
-        <?php if (empty($liveNews)): ?>
+        <?php if (empty($links)): ?>
             <p class="text-muted text-center mt-6">
                 <?= trans("no_records_found"); ?>
             </p>
