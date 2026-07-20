@@ -146,7 +146,7 @@ $routes->group($customRoutes->admin, ['filter' => 'auth'], function ($routes) {
     //Epapers
     $routes->get('publications/(:num)/issues', 'EpaperController::issues/$1');
     $routes->match(['get', 'post'], 'publications/(:num)/issues/add', 'EpaperController::addIssue/$1');
-    $routes->match(['get', 'post'],'issues/edit/(:num)','EpaperController::editIssue/$1');
+    $routes->match(['get', 'post'], 'issues/edit/(:num)', 'EpaperController::editIssue/$1');
 
     $routes->post('issues/delete', 'EpaperController::deleteIssue');
     // $routes->get('epapers/(:num)', 'EpaperController::epaperNews/$1');
@@ -497,6 +497,17 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
     // $routes->get('share/(:num)', 'PostController::share/$1'); // ?lang_id=1
     $routes->get('media', 'MediaController::index');
     $routes->get('media/(:num)', 'MediaController::show/$1');
+
+
+    $routes->get('newspapers/websites', 'EpaperController::newspaperWebsites');
+
+    $routes->get('newspapers/pdfs', 'EpaperController::newspaperPdfs');
+
+    $routes->get('periodicals', 'EpaperController::periodicals');
+
+    $routes->get('magazines', 'EpaperController::magazines');
+
+    $routes->get('publications/(:num)/issues', 'EpaperController::publication/$1');
 });
 
 // $routes->get('test', 'HomeController::test');
