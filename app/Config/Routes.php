@@ -499,6 +499,8 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
     $routes->get('media/(:num)', 'MediaController::show/$1');
 
 
+    $routes->get('newspapers', 'EpaperController::newspapers');
+
     $routes->get('newspapers/websites', 'EpaperController::newspaperWebsites');
 
     $routes->get('newspapers/pdfs', 'EpaperController::newspaperPdfs');
@@ -506,8 +508,10 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
     $routes->get('periodicals', 'EpaperController::periodicals');
 
     $routes->get('magazines', 'EpaperController::magazines');
+    $routes->get('magazine-categories', 'EpaperController::magazineCategories');
 
     $routes->get('publications/(:num)/issues', 'EpaperController::publication/$1');
+    $routes->get('epapers/featured', 'EpaperController::featured');
 });
 
 // $routes->get('test', 'HomeController::test');

@@ -39,11 +39,31 @@ class EpaperController extends ResourceController
                 'website',
                 $params['langId'],
                 $params['page'],
-                $params['limit']
+                $params['limit'],
+                null,
+                null
             )
         );
     }
+    /**
+     * GET /api/epapers/newspapers
+     */
+    public function newspapers()
+    {
+        $params = $this->getRequestParams();
 
+        return $this->response->setJSON(
+            $this->epaperModel->getIssues(
+                ['newspaper'],
+                null,
+                $params['langId'],
+                $params['page'],
+                $params['limit'],
+                null,
+                null
+            )
+        );
+    }
     /**
      * GET /api/epapers/newspapers/pdfs
      */
@@ -57,7 +77,9 @@ class EpaperController extends ResourceController
                 'pdf',
                 $params['langId'],
                 $params['page'],
-                $params['limit']
+                $params['limit'],
+                null,
+                null
             )
         );
     }
@@ -93,6 +115,7 @@ class EpaperController extends ResourceController
     public function magazines()
     {
         $params = $this->getRequestParams();
+        $categoryId = (int)$this->request->getGet('category_id');
 
         return $this->response->setJSON(
             $this->epaperModel->getIssues(
@@ -100,11 +123,34 @@ class EpaperController extends ResourceController
                 null,
                 $params['langId'],
                 $params['page'],
-                $params['limit']
+                $params['limit'],
+                null,
+                $categoryId
             )
         );
     }
+    //get the categories containing magazines
+    public function magazineCategories()
+    {
+        $params = $this->getRequestParams();
 
+        return $this->response->setJSON(
+            $this->epaperModel->getMagazineCategories(
+                $params['langId']
+            )
+        );
+    }
+    // get featured epapers
+    public function featured()
+    {
+        $params = $this->getRequestParams();
+
+        return $this->response->setJSON(
+            $this->epaperModel->getFeaturedIssues(
+                $params['langId']
+            )
+        );
+    }
     /**
      * GET /api/publications/{id}/issues
      */

@@ -80,7 +80,7 @@ $selectedLangId = old('lang_id') ?? $publication?->lang_id ?? $activeLang?->id ?
                             <?php
 
                             $types = [
-                                'newspaper' => 'Newspaper',
+                                'newspaper' => 'Daily newspaper',
                                 'weekly' => 'Weekly',
                                 'fortnightly' => 'Fortnightly',
                                 'monthly' => 'Monthly',

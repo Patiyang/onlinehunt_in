@@ -18,7 +18,8 @@ class EpaperMobileModel extends Model
         int $langId = 1,
         int $page = 1,
         int $limit = 20,
-        ?string $frequency = null
+        ?string $frequency = null,
+        ?int $categoryid = null
     ): array {
 
         $page = max(1, $page);
@@ -30,9 +31,12 @@ class EpaperMobileModel extends Model
 
         $builder->whereIn('p.publication_type', $publicationTypes);
         $builder->where('p.lang_id', $langId);
-        
+
         if (!empty($frequency)) {
             $builder->where('p.publication_type', $frequency);
+        }
+        if (!empty($categoryid)) {
+            $builder->where('p.category_id', $categoryid);
         }
         if (!empty($sourceType)) {
             $builder->where('e.source_type', $sourceType);
@@ -48,6 +52,7 @@ class EpaperMobileModel extends Model
             'data' => $this->formatIssues($rows),
             'meta' => [
                 'total' => $total,
+
                 'page' => $page,
                 'limit' => $limit,
                 'total_pages' => (int)ceil($total / $limit)
@@ -93,6 +98,76 @@ class EpaperMobileModel extends Model
     }
 
     /**
+     * Get magazine categories.
+     */
+    public function getMagazineCategories(int $langId): array
+    {
+        $builder = $this->db->table('categories c');
+
+        $builder->select("
+        c.id,
+        c.name,
+        c.slug,
+        COUNT(DISTINCT p.id) AS publication_count,
+        COUNT(DISTINCT e.id) AS issue_count
+    ");
+
+        $builder->join(
+            'epaper_publications p',
+            'p.category_id = c.id',
+            'inner'
+        );
+
+        $builder->join(
+            'epapers e',
+            'e.publication_id = p.id AND e.status = 1',
+            'left'
+        );
+
+        $builder->where('p.status', 1);
+        $builder->where('p.publication_type', 'magazine');
+        $builder->where('p.lang_id', $langId);
+
+        $builder->groupBy('c.id');
+
+        $builder->orderBy('c.name', 'ASC');
+
+        $rows = $builder->get()->getResult();
+
+        $data = [];
+
+        foreach ($rows as $row) {
+            $data[] = [
+                'id' => (int)$row->id,
+                'name' => $row->name,
+                'slug' => $row->slug,
+                'publication_count' => (int)$row->publication_count,
+                'issue_count' => (int)$row->issue_count,
+            ];
+        }
+
+        return [
+            'data' => $data,
+        ];
+    }
+    public function getFeaturedIssues(
+        int $langId = 1,
+        int $limit = 10
+    ): array {
+        $builder = $this->baseQuery();
+
+        $builder->where('e.is_featured', 1);
+        $builder->where('p.lang_id', $langId);
+
+        $builder->limit($limit);
+
+        return [
+            'data' => $this->formatIssues(
+                $builder->get()->getResult()
+            )
+        ];
+    }
+    /**
      * Base query shared by all API endpoints.
      */
     protected function baseQuery()
@@ -111,6 +186,7 @@ class EpaperMobileModel extends Model
             e.is_today,
             e.sort_order,
             e.total_views,
+            e.is_featured,
 
             p.title AS publication_title,
             p.slug AS publication_slug,
@@ -169,7 +245,8 @@ class EpaperMobileModel extends Model
                 'is_today' => (bool)$row->is_today,
 
                 'total_views' => (int)$row->total_views,
-
+                
+                'is_featured' => (int)$row->is_featured,
                 'publication' => [
 
                     'id' => (int)$row->publication_id,
