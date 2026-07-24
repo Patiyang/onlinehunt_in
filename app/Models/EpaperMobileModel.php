@@ -9,6 +9,96 @@ class EpaperMobileModel extends Model
 {
     protected $table = 'epapers';
 
+
+    /**
+     * Get a single issue by ID.
+     */
+    public function getIssueById(int $issueId, int $langId): ?array
+    {
+        $builder = $this->db->table('epapers e');
+
+        $builder->select("
+        e.*,
+
+        p.title AS publication_title,
+        p.slug AS publication_slug,
+        p.description AS publication_description,
+        p.website_url,
+        p.logo,
+        p.logo AS publication_cover,
+        p.publication_type,
+
+        c.id AS category_id,
+        c.name AS category_name,
+        c.slug AS category_slug
+    ");
+
+        $builder->join(
+            'epaper_publications p',
+            'p.id = e.publication_id'
+        );
+
+        $builder->join(
+            'categories c',
+            'c.id = p.category_id',
+            'left'
+        );
+
+        $builder->where('e.id', $issueId);
+        $builder->where('e.status', 1);
+        $builder->where('p.status', 1);
+        $builder->where('p.lang_id', $langId);
+
+        $row = $builder->get()->getRow();
+
+        if (empty($row)) {
+            return null;
+        }
+
+        return [
+            'id' => (int)$row->id,
+            'publication_id' => (int)$row->publication_id,
+
+            'title' => $row->title,
+
+            'cover_image' => empty($row->cover_image)
+                ? null
+                : base_url($row->cover_image),
+
+            'pdf_file' => empty($row->pdf_file)
+                ? null
+                : base_url($row->pdf_file),
+
+            'website_url' => $row->website_url,
+            'source_type' => $row->source_type,
+
+            'issue_date' => $row->issue_date,
+            'sort_order' => (int)$row->sort_order,
+            'is_today' => (bool)$row->is_today,
+            'is_featured' => (bool)$row->is_featured,
+
+            'publication' => [
+                'id' => (int)$row->publication_id,
+                'title' => $row->publication_title,
+                'slug' => $row->publication_slug,
+                'description' => $row->publication_description,
+                'logo' => empty($row->logo)
+                    ? null
+                    : base_url($row->logo),
+                'cover_image' => empty($row->publication_cover)
+                    ? null
+                    : base_url($row->publication_cover),
+                'publication_type' => $row->publication_type,
+                // 'frequency' => $row->frequency,
+            ],
+
+            'category' => [
+                'id' => (int)$row->category_id,
+                'name' => $row->category_name,
+                'slug' => $row->category_slug,
+            ],
+        ];
+    }
     /**
      * Returns issues filtered by publication type and source type.
      */
@@ -245,7 +335,7 @@ class EpaperMobileModel extends Model
                 'is_today' => (bool)$row->is_today,
 
                 'total_views' => (int)$row->total_views,
-                
+
                 'is_featured' => (int)$row->is_featured,
                 'publication' => [
 

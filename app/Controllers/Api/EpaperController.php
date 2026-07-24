@@ -51,11 +51,15 @@ class EpaperController extends ResourceController
     public function newspapers()
     {
         $params = $this->getRequestParams();
-
+        $source_type = trim((string) $this->request->getGet('source_type'));
+        $source_type = match ($source_type) {
+            '', 'null', 'NULL', 'all' => null,
+            default => $source_type,
+        };
         return $this->response->setJSON(
             $this->epaperModel->getIssues(
                 ['newspaper'],
-                null,
+                $source_type,
                 $params['langId'],
                 $params['page'],
                 $params['limit'],
@@ -93,6 +97,12 @@ class EpaperController extends ResourceController
     {
         $params = $this->getRequestParams();
         $frequency = $this->request->getGet('frequency');
+        // $source_type = $this->request->getGet('source_type');
+        $source_type = trim((string) $this->request->getGet('source_type'));
+        $source_type = match ($source_type) {
+            '', 'null', 'NULL', 'all' => null,
+            default => $source_type,
+        };
         return $this->response->setJSON(
             $this->epaperModel->getIssues(
                 [
@@ -100,7 +110,7 @@ class EpaperController extends ResourceController
                     'fortnightly',
                     'monthly'
                 ],
-                null,
+                $source_type,
                 $params['langId'],
                 $params['page'],
                 $params['limit'],
@@ -166,5 +176,30 @@ class EpaperController extends ResourceController
                 $params['limit']
             )
         );
+    }
+
+
+    public function issue($id)
+    {
+        $params = $this->getRequestParams();
+
+        $issue = $this->epaperModel->getIssueById(
+            (int)$id,
+            $params['langId']
+        );
+
+        if (empty($issue)) {
+            return $this->response
+                ->setStatusCode(404)
+                ->setJSON([
+                    'status' => false,
+                    'message' => 'Issue not found'
+                ]);
+        }
+
+        return $this->response->setJSON([
+            'status' => true,
+            'data' => $issue
+        ]);
     }
 }

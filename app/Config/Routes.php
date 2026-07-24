@@ -512,6 +512,7 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
 
     $routes->get('publications/(:num)/issues', 'EpaperController::publication/$1');
     $routes->get('epapers/featured', 'EpaperController::featured');
+    $routes->get('epapers/(:num)', 'EpaperController::issue/$1');
 });
 
 // $routes->get('test', 'HomeController::test');
