@@ -63,11 +63,11 @@ class EpaperMobileModel extends Model
 
             'cover_image' => empty($row->cover_image)
                 ? null
-                : base_url($row->cover_image),
+                : $row->cover_image,
 
             'pdf_file' => empty($row->pdf_file)
                 ? null
-                : base_url($row->pdf_file),
+                : $row->pdf_file,
 
             'website_url' => $row->website_url,
             'source_type' => $row->source_type,
@@ -84,10 +84,10 @@ class EpaperMobileModel extends Model
                 'description' => $row->publication_description,
                 'logo' => empty($row->logo)
                     ? null
-                    : base_url($row->logo),
+                    : $row->logo,
                 'cover_image' => empty($row->publication_cover)
                     ? null
-                    : base_url($row->publication_cover),
+                    : $row->publication_cover,
                 'publication_type' => $row->publication_type,
                 // 'frequency' => $row->frequency,
             ],
