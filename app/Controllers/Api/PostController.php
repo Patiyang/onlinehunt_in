@@ -46,6 +46,7 @@ class PostController extends BaseController
                 'video_url'     => $row->video_url,
                 'created_at'    => $row->created_at,
                 'pageviews'     => (int)$row->pageviews,
+                'feed_id'       => (int)$row->feed_id,
                 'video_id'      => $row->video_id ?? null,
                 'comment_count' => (int)$row->comment_count,
                 'author'        => [
@@ -65,6 +66,11 @@ class PostController extends BaseController
                     'description' => $row->category_description,
                     'color' => $row->color,
                     'meta_title' => $row->meta_title
+                ],
+                'feed'      => [
+                    'id'          => (int)$row->feed_id,
+                    'name'        => $row->feed_name,
+                    'feed_url'      => $row->feed_url
                 ]
             ];
 

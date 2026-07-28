@@ -513,6 +513,28 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
     $routes->get('publications/(:num)/issues', 'EpaperController::publication/$1');
     $routes->get('epapers/featured', 'EpaperController::featured');
     $routes->get('epapers/(:num)', 'EpaperController::issue/$1');
+
+    //fololowing
+
+    $routes->post('follow', 'FollowController::follow');
+
+    $routes->post('unfollow', 'FollowController::unfollow');
+
+    $routes->get('follow/status', 'FollowController::status');
+
+    $routes->get('follow/counts/(:num)', 'FollowController::counts/$1');
+
+    $routes->get('follow/profile-stats', 'FollowController::profileStats');
+
+    //Rections
+
+    $routes->post('reactions', 'ReactionController::react');
+
+    $routes->post('reactions/remove', 'ReactionController::remove');
+
+    $routes->get('posts/(:num)/reactions', 'ReactionController::summary/$1');
+
+    $routes->get('reactions/user', 'ReactionController::userReaction');
 });
 
 // $routes->get('test', 'HomeController::test');
