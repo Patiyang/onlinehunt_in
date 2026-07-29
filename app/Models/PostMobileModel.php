@@ -15,14 +15,13 @@ class PostMobileModel extends Model
     public function getPosts($limit = 10, $offset = 0, $langId = null)
     {
         $builder = $this->db->table('posts p')
-            ->select('p.id, p.title, p.slug, p.summary, p.content, p.meta_keywords,
-                  p.pageviews,p.video_id,p.video_url, p.comment_count, p.image_url, p.created_at,
-                  u.id as user_id, u.username, u.slug as user_slug, u.email, 
-                  u.avatar, u.cover_image, u.about_me, u.last_seen,
-                  c.id as category_id, c.name as category_name, c.slug as category_slug, 
-                  c.description as category_description,c.meta_title, c.color')
+            ->select('p.id, p.title, p.slug, p.summary, p.content, p.meta_keywords,p.pageviews,p.video_id,p.video_url, p.comment_count, p.image_url, p.created_at,
+                  u.id as user_id, u.username, u.slug as user_slug, u.email, u.avatar, u.cover_image, u.about_me, u.last_seen,
+                  c.id as category_id, c.name as category_name, c.slug as category_slug, c.description as category_description,c.meta_title, c.color,
+                  f.id as feed_id, f.feed_name,f.feed_url')
             ->join('users u', 'u.id = p.user_id', 'left')
             ->join('categories c', 'c.id = p.category_id', 'left')
+            ->join('rss_feeds f', 'f.id = p.feed_id', 'left')
             ->where('p.status', 1)
             ->where('p.visibility', 1);
 
@@ -58,7 +57,7 @@ class PostMobileModel extends Model
         return $this->select('p.*, 
                               u.id as user_id, u.username, u.slug as user_slug, u.email, u.avatar, u.cover_image, u.about_me, u.last_seen,
                               c.id as category_id, c.name as category_name, c.slug as category_slug, c.description as category_description, c.meta_title, c.color,
-                              f.id as feed_id, f.feed_name')
+                              f.id as feed_id, f.feed_name,f.feed_url')
             ->from('posts p')
             ->join('users u', 'u.id = p.user_id', 'left')
             ->join('categories c', 'c.id = p.category_id', 'left')
@@ -91,9 +90,11 @@ class PostMobileModel extends Model
             ->select('p.id, p.title, p.slug, p.summary, p.content, p.meta_keywords,
                   p.pageviews,p.video_id,p.video_url, p.comment_count, p.image_url, p.created_at,
                   u.id as user_id, u.username, u.slug as user_slug, u.email, u.avatar, u.cover_image, u.about_me, u.last_seen,
-                  c.id as category_id, c.name as category_name, c.slug as category_slug, c.description as category_description, c.meta_title, c.color')
+                  c.id as category_id, c.name as category_name, c.slug as category_slug, c.description as category_description, c.meta_title, c.color,
+                  f.id as feed_id, f.feed_name, f.feed_url')
             ->join('users u', 'u.id = p.user_id', 'left')
             ->join('categories c', 'c.id = p.category_id', 'left')
+            ->join('rss_feeds f', 'f.id = p.feed_id', 'left')
             ->where('p.status', 1)
             ->where('p.visibility', 1)
             ->where('p.category_id', $categoryId);
@@ -134,13 +135,13 @@ class PostMobileModel extends Model
         $builder = $this->db->table('posts p')
             ->select('p.id, p.title, p.slug, p.summary, p.content, p.meta_keywords,
                   p.pageviews,p.video_id,p.video_url, p.comment_count, p.image_url, p.created_at,
-                  u.id as user_id, u.username, u.slug as user_slug, u.email, 
-                  u.avatar, u.cover_image, u.about_me, u.last_seen,
-                  c.id as category_id, c.name as category_name, c.slug as category_slug, 
-                  c.description as category_description, c.meta_title, c.color')
+                  u.id as user_id, u.username, u.slug as user_slug, u.email, u.avatar, u.cover_image, u.about_me, u.last_seen,c.id as category_id, c.name as category_name, c.slug as category_slug, 
+                  c.description as category_description, c.meta_title, c.color,
+                  f.id as feed_id, f.feed_name, f.feed_url')
             ->join('post_selections ps', 'ps.post_id = p.id')
             ->join('users u', 'u.id = p.user_id', 'left')
             ->join('categories c', 'c.id = p.category_id', 'left')
+            ->join('rss_feeds f', 'f.id = p.feed_id', 'left')
             ->where('p.status', 1)
             ->where('p.visibility', 1)
             ->where('ps.selection_type', $type);
@@ -151,12 +152,7 @@ class PostMobileModel extends Model
         if ($isVideo) {
             $builder->where('p.video_id IS NOT NULL', null, false);
         }
-        // c.meta_title,c.color,
-        // else {
-        //     $builder->where('p.video_id IS NULL', null, false);
-        // }
-
-        // count total
+   
         $total = $builder->countAllResults(false);
 
         $posts = $builder
@@ -186,9 +182,11 @@ class PostMobileModel extends Model
                   p.pageviews,p.video_id,p.video_url, p.comment_count, p.image_url, p.created_at,
                   u.id as user_id, u.username, u.slug as user_slug, u.email, u.avatar,
                   u.cover_image, u.about_me, u.last_seen,
-                  c.id as category_id, c.name as category_name, c.slug as category_slug, c.description as category_description, c.meta_title, c.color')
+                  c.id as category_id, c.name as category_name, c.slug as category_slug, c.description as category_description, c.meta_title, c.color,
+                  f.id as feed_id, f.feed_name, f.feed_url')
             ->join('users u', 'u.id = p.user_id', 'left')
             ->join('categories c', 'c.id = p.category_id', 'left')
+            ->join('rss_feeds f', 'f.id = p.feed_id', 'left')
             ->where('p.status', 1)
             ->where('p.visibility', 1)
             ->where('p.category_id', $categoryId)
