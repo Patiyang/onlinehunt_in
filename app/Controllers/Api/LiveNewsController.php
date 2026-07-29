@@ -15,67 +15,7 @@ class LiveNewsController extends ResourceController
         $this->liveNewsMobileModel = new LiveNewsMobileModel();
     }
 
-    private function parseFilters($useDefaults = true)
-    {
-        $include = $this->request->getGet('include');
-        $exclude = $this->request->getGet('exclude');
 
-        $include = $include ? explode(',', $include) : [];
-        $exclude = $exclude ? explode(',', $exclude) : [];
-
-        if ($useDefaults && empty($include)) {
-            $exclude = array_unique(array_merge($this->defaultExcludes, $exclude));
-        }
-
-        return [
-            'include' => $include,
-            'exclude' => $exclude
-        ];
-    }
-
-    private function formatLiveNews($rows, array $options = [])
-    {
-        $liveNews = [];
-
-        $include = $options['include'] ?? [];
-        $exclude = $options['exclude'] ?? [];
-
-        foreach ($rows as $row) {
-            $keywordsArray = [];
-            if (!empty($row->keywords)) {
-                $keywordsArray = array_map('trim', explode(',', $row->keywords));
-            }
-
-            $newsItem = [
-                'id'            => (int)$row->id,
-                'title'         => $row->title,
-                'url'           => $row->url,
-                'created_at'    => $row->created_at,
-            ];
-
-            // Apply include filters
-            if (!empty($include)) {
-                $filtered = [];
-                foreach ($include as $field) {
-                    if (isset($newsItem[$field])) {
-                        $filtered[$field] = $newsItem[$field];
-                    }
-                }
-                $newsItem = $filtered;
-            }
-
-            // Apply exclude filters
-            if (!empty($exclude)) {
-                foreach ($exclude as $field) {
-                    unset($newsItem[$field]);
-                }
-            }
-
-            $liveNews[] = $newsItem;
-        }
-
-        return $liveNews;
-    }
 
     public function index()
     {
@@ -92,6 +32,26 @@ class LiveNewsController extends ResourceController
             'message' => 'Live news fetched successfully',
             'data' => $result['data'],
             'meta' => $result['meta']
+        ]);
+    }
+
+
+    public function showOne($id)
+    {
+        $news = $this->liveNewsMobileModel->getLiveNewsById((int)$id);
+
+        if (!$news) {
+            return $this->response
+                ->setStatusCode(404)
+                ->setJSON([
+                    'success' => false,
+                    'message' => 'Live news item not found.'
+                ]);
+        }
+
+        return $this->response->setJSON([
+            'success' => true,
+            'data' => $news
         ]);
     }
 }

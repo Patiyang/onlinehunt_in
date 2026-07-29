@@ -52,4 +52,34 @@ class LiveNewsMobileModel extends Model
             ]
         ];
     }
+
+
+    /**
+ * Get a single live news item
+ */
+public function getLiveNewsById(int $id)
+{
+    $news = $this->db->table('live_news ln')
+        ->select('ln.id, ln.status, ln.lang_id, ln.title, ln.url, ln.category_id,
+                  ln.description, ln.keywords, ln.created_at,
+                  u.id as user_id, u.username, u.slug as user_slug,
+                  u.email, u.avatar, u.cover_image, u.about_me, u.last_seen')
+        ->join('users u', 'u.id = ln.user_id', 'left')
+        ->where('ln.id', $id)
+        ->where('ln.status', 1)
+        ->get()
+        ->getRow();
+
+    if (!$news) {
+        return null;
+    }
+
+    $news->id = (int)$news->id;
+    $news->lang_id = (int)$news->lang_id;
+    $news->status = (int)$news->status;
+    $news->category_id = (int)$news->category_id;
+    $news->user_id = (int)$news->user_id;
+
+    return $news;
+}
 }

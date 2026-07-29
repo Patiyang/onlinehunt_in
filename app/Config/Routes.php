@@ -494,6 +494,8 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
 
     //Live News
     $routes->get('live-news', 'LiveNewsController::index'); // ?limit=10&offset=0&lang_id=1
+    $routes->get('live-news/(:num)', 'LiveNewsController::showOne/$1');
+    
     // $routes->get('share/(:num)', 'PostController::share/$1'); // ?lang_id=1
     $routes->get('media', 'MediaController::index');
     $routes->get('media/(:num)', 'MediaController::show/$1');
