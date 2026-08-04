@@ -3,11 +3,13 @@
 namespace App\Controllers;
 
 use App\Services\LiveNewsService;
+use App\Services\FirebaseNotificationService;
 
 class LiveNewsController extends BaseAdminController
 {
     protected $liveNewsService;
     protected $liveNewsModel;
+    protected $firebaseNotificationService;
     public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)
     {
         parent::initController($request, $response, $logger);
@@ -16,6 +18,9 @@ class LiveNewsController extends BaseAdminController
 
         // $this->liveNewsService = new LiveNewsService();
         $this->liveNewsModel = model('LiveNewsModel');
+
+        $this->firebaseNotificationService =
+            new FirebaseNotificationService();
     }
     public function liveNews()
     {
@@ -49,8 +54,15 @@ class LiveNewsController extends BaseAdminController
 
             if ($this->liveNewsModel->trySave($live)) {
 
-                // $feedId = (int)($this->liveNewsModel->insertID() ?? 0);
-                // $newFeed = $this->liveNewsModel->find($feedId);
+                $this->firebaseNotificationService->sendToTopic(
+                    'all',
+                    'Live News',
+                    $live->title,
+                    [
+                        'type' => 'live_news',
+                        'id' => (int)$live->id,
+                    ]
+                );
                 setSuccessMessage("msg_added");
                 return redirect()->to(getBackUrl());
             }
@@ -79,6 +91,16 @@ class LiveNewsController extends BaseAdminController
             $live->fill($postData);
 
             if ($this->liveNewsModel->trySave($live)) {
+
+                $this->firebaseNotificationService->sendToTopic(
+                    'all',
+                    'Live News',
+                    $live->title,
+                    [
+                        'type' => 'live_news',
+                        'id' => (int)$live->id,
+                    ]
+                );
                 setSuccessMessage("msg_updated");
                 return redirect()->to(getBackUrl());
             }
@@ -96,6 +118,8 @@ class LiveNewsController extends BaseAdminController
             'live'           => $live
         ]);
     }
+
+  
     /**
      * AJAX Endpoint: Delete Feed
      *

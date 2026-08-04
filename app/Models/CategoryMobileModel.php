@@ -64,7 +64,6 @@ class CategoryMobileModel extends Model
         }
 
         $category = $builder->get()->getRow();
-
         $category->id = (int)$category->id;
         $category->lang_id = (int)$category->lang_id;
         $category->status = (int)$category->status;
@@ -84,7 +83,7 @@ class CategoryMobileModel extends Model
             if ($isVideo) {
                 $builder->where('p.video_id IS NOT NULL', null, false);
             }
-            
+
             // $builder->video_id = (int)$builder->video_id;
             // count total posts in category
             $total = $builder->countAllResults(false);

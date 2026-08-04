@@ -495,7 +495,9 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
     //Live News
     $routes->get('live-news', 'LiveNewsController::index'); // ?limit=10&offset=0&lang_id=1
     $routes->get('live-news/(:num)', 'LiveNewsController::showOne/$1');
-    
+
+    $routes->post('live-news/test_notification', 'LiveNewsController::testNotification'); // ?limit=10&offset=0&lang_id=1
+
     // $routes->get('share/(:num)', 'PostController::share/$1'); // ?lang_id=1
     $routes->get('media', 'MediaController::index');
     $routes->get('media/(:num)', 'MediaController::show/$1');
@@ -537,6 +539,15 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
     $routes->get('posts/(:num)/reactions', 'ReactionController::summary/$1');
 
     $routes->get('reactions/user', 'ReactionController::userReaction');
+    // reading list
+
+    $routes->post('reading-list', 'ReadingListController::add');
+
+    $routes->post('reading-list/remove', 'ReadingListController::remove');
+
+    $routes->get('reading-list/status', 'ReadingListController::status');
+
+    $routes->get('reading-list', 'ReadingListController::index');
 });
 
 // $routes->get('test', 'HomeController::test');
