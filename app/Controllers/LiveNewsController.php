@@ -53,7 +53,24 @@ class LiveNewsController extends BaseAdminController
             // $feed->processForm($postData);
 
             if ($this->liveNewsModel->trySave($live)) {
+                $imageUrl = (string)$live->image_url;
 
+                if (
+                    !empty($live->video_url) &&
+                    str_contains(strtolower($live->video_url), 'youtube')
+                ) {
+                    $uri = parse_url($live->video_url);
+
+                    if (!empty($uri['query'])) {
+                        parse_str($uri['query'], $queryParams);
+
+                        if (!empty($queryParams['v'])) {
+                            $imageUrl = 'https://img.youtube.com/vi/'
+                                . $queryParams['v']
+                                . '/0.jpg';
+                        }
+                    }
+                }
                 $this->firebaseNotificationService->sendToTopic(
                     'all',
                     'Live News',
@@ -61,6 +78,9 @@ class LiveNewsController extends BaseAdminController
                     [
                         'type' => 'live_news',
                         'id' => (int)$live->id,
+                        'live_url' => $live->url,
+                        'slug' => '',
+                        'image-url' => $imageUrl
                     ]
                 );
                 setSuccessMessage("msg_added");
@@ -91,7 +111,24 @@ class LiveNewsController extends BaseAdminController
             $live->fill($postData);
 
             if ($this->liveNewsModel->trySave($live)) {
+                $imageUrl = (string)$live->image_url;
 
+                if (
+                    !empty($live->video_url) &&
+                    str_contains(strtolower($live->video_url), 'youtube')
+                ) {
+                    $uri = parse_url($live->video_url);
+
+                    if (!empty($uri['query'])) {
+                        parse_str($uri['query'], $queryParams);
+
+                        if (!empty($queryParams['v'])) {
+                            $imageUrl = 'https://img.youtube.com/vi/'
+                                . $queryParams['v']
+                                . '/0.jpg';
+                        }
+                    }
+                }
                 $this->firebaseNotificationService->sendToTopic(
                     'all',
                     'Live News',
@@ -99,6 +136,9 @@ class LiveNewsController extends BaseAdminController
                     [
                         'type' => 'live_news',
                         'id' => (int)$live->id,
+                        'live_url' => $live->url,
+                        'slug' => '',
+                        'image-url' => $imageUrl
                     ]
                 );
                 setSuccessMessage("msg_updated");
@@ -119,7 +159,7 @@ class LiveNewsController extends BaseAdminController
         ]);
     }
 
-  
+
     /**
      * AJAX Endpoint: Delete Feed
      *

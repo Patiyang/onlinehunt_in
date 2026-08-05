@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+use App\Services\FirebaseNotificationService;
 
 class PostSelectionModel extends Model
 {
@@ -10,12 +11,15 @@ class PostSelectionModel extends Model
     protected $allowedFields = ['post_id', 'lang_id', 'selection_type', 'created_at'];
     protected $createdField = 'created_at';
     protected $postSelectionOptions;
+    protected $firebaseNotificationService;
 
     public function __construct()
     {
         parent::__construct();
 
         $this->postSelectionOptions = getAppDefault('postSelectionOptions');
+        $this->firebaseNotificationService =
+            new FirebaseNotificationService();
     }
 
     /**
@@ -66,7 +70,6 @@ class PostSelectionModel extends Model
             foreach ($allActiveTypes as $type) {
                 $this->enforceSelectionLimit($type, $langId);
             }
-
         }
 
         $this->db->transComplete();
@@ -77,8 +80,106 @@ class PostSelectionModel extends Model
     /**
      * Adds or removes posts from a specific selection
      */
-    public function updatePostSelections(int|string|array $ids, string $selectionType, string $action): bool
-    {
+    // public function updatePostSelections(int|string|array $ids, string $selectionType, string $action): bool
+    // {
+    //     if (empty($ids)) {
+    //         return false;
+    //     }
+
+    //     $ids = is_array($ids) ? $ids : [$ids];
+    //     $ids = array_filter(array_map('intval', $ids));
+
+    //     // Remove
+    //     if ($action === 'remove') {
+    //         $this->where('selection_type', $selectionType)
+    //             ->whereIn('post_id', $ids)
+    //             ->delete();
+    //         return true;
+    //     }
+
+    //     // Add
+    //     if ($action === 'add') {
+    //         $existingRecords = $this->select('post_id')
+    //             ->where('selection_type', $selectionType)
+    //             ->whereIn('post_id', $ids)
+    //             ->findAll();
+
+    //         // Extract existing IDs into a simple array
+    //         $existingIds = [];
+    //         foreach ($existingRecords as $record) {
+    //             $existingIds[] = is_object($record) ? (int)$record->post_id : (int)$record['post_id'];
+    //         }
+
+    //         $idsToInsert = array_diff($ids, $existingIds);
+    //         if (empty($idsToInsert)) {
+    //             return true;
+    //         }
+
+    //         // Fetch lang_id for ALL new posts in a single query to avoid N+1 problem
+    //         $postRecords = model('PostModel')
+    //             ->select('id, lang_id')
+    //             ->whereIn('id', $idsToInsert)
+    //             ->findAll();
+
+    //         // Create a map of post_id => lang_id for quick lookups
+    //         $langMap = [];
+    //         foreach ($postRecords as $record) {
+    //             $langMap[$record->id] = (int)$record->lang_id;
+
+
+
+    //             if ($selectionType == 'breaking_news') {
+    //                 $this->firebaseNotificationService->sendToTopic(
+    //                     'all',
+    //                     $record->title,
+    //                     $record->summary,
+    //                     [
+    //                         'type' =>$record->video_url==null? 'article':'video',
+    //                         'id' => '',
+    //                         'live_url' => '',
+    //                         'slug' => $record->slug,
+    //                         'image_url' => $record->image_url
+    //                     ]
+    //                 );
+    //             }
+    //         }
+
+    //         $batchData = [];
+    //         $affectedLangs = [];
+
+    //         foreach ($idsToInsert as $postId) {
+    //             // Get the specific language for this post, default to 1 if not found
+    //             $langId = $langMap[$postId] ?? 1;
+
+    //             // Store unique language IDs
+    //             $affectedLangs[$langId] = $langId;
+
+    //             $batchData[] = [
+    //                 'post_id'        => $postId,
+    //                 'lang_id'        => $langId,
+    //                 'selection_type' => $selectionType
+    //             ];
+    //         }
+
+    //         $inserted = (bool)$this->insertBatch($batchData);
+
+    //         if ($inserted) {
+    //             // Enforce the limit ONLY for the languages that received new posts
+    //             foreach ($affectedLangs as $langId) {
+    //                 $this->enforceSelectionLimit($selectionType, $langId);
+    //             }
+    //         }
+
+    //         return $inserted;
+    //     }
+
+    //     return false;
+    // }
+    public function updatePostSelections(
+        int|string|array $ids,
+        string $selectionType,
+        string $action
+    ): bool {
         if (empty($ids)) {
             return false;
         }
@@ -86,52 +187,64 @@ class PostSelectionModel extends Model
         $ids = is_array($ids) ? $ids : [$ids];
         $ids = array_filter(array_map('intval', $ids));
 
+        if (empty($ids)) {
+            return false;
+        }
+
         // Remove
         if ($action === 'remove') {
             $this->where('selection_type', $selectionType)
                 ->whereIn('post_id', $ids)
                 ->delete();
+
             return true;
         }
 
         // Add
         if ($action === 'add') {
+
+            // Find posts that are already selected
             $existingRecords = $this->select('post_id')
                 ->where('selection_type', $selectionType)
                 ->whereIn('post_id', $ids)
                 ->findAll();
 
-            // Extract existing IDs into a simple array
             $existingIds = [];
+
             foreach ($existingRecords as $record) {
-                $existingIds[] = is_object($record) ? (int)$record->post_id : (int)$record['post_id'];
+                $existingIds[] = is_object($record)
+                    ? (int)$record->post_id
+                    : (int)$record['post_id'];
             }
 
+            // Only process genuinely new selections
             $idsToInsert = array_diff($ids, $existingIds);
+
             if (empty($idsToInsert)) {
                 return true;
             }
 
-            // Fetch lang_id for ALL new posts in a single query to avoid N+1 problem
+            /*
+         * Get all required post information in one query.
+         */
             $postRecords = model('PostModel')
-                ->select('id, lang_id')
+                ->select('id, lang_id, title, summary, slug, video_url, image_url')
                 ->whereIn('id', $idsToInsert)
                 ->findAll();
 
-            // Create a map of post_id => lang_id for quick lookups
             $langMap = [];
+
             foreach ($postRecords as $record) {
-                $langMap[$record->id] = (int)$record->lang_id;
+                $langMap[(int)$record->id] = (int)$record->lang_id;
             }
 
             $batchData = [];
             $affectedLangs = [];
 
             foreach ($idsToInsert as $postId) {
-                // Get the specific language for this post, default to 1 if not found
+
                 $langId = $langMap[$postId] ?? 1;
 
-                // Store unique language IDs
                 $affectedLangs[$langId] = $langId;
 
                 $batchData[] = [
@@ -141,21 +254,90 @@ class PostSelectionModel extends Model
                 ];
             }
 
+            /*
+         * Insert selections first.
+         */
             $inserted = (bool)$this->insertBatch($batchData);
 
-            if ($inserted) {
-                // Enforce the limit ONLY for the languages that received new posts
-                foreach ($affectedLangs as $langId) {
-                    $this->enforceSelectionLimit($selectionType, $langId);
+            if (!$inserted) {
+                return false;
+            }
+
+            /*
+         * Enforce selection limits.
+         */
+            foreach ($affectedLangs as $langId) {
+                $this->enforceSelectionLimit(
+                    $selectionType,
+                    $langId
+                );
+            }
+
+            /*
+         * Send notifications only for breaking news.
+         */
+            if ($selectionType === 'breaking_news') {
+
+                foreach ($postRecords as $record) {
+
+                    try {
+                        $imageUrl = (string)$record->image_url;
+
+                        if (
+                            !empty($record->video_url) &&
+                            str_contains(strtolower($record->video_url), 'youtube')
+                        ) {
+                            $uri = parse_url($record->video_url);
+
+                            if (!empty($uri['query'])) {
+                                parse_str($uri['query'], $queryParams);
+
+                                if (!empty($queryParams['v'])) {
+                                    $imageUrl = 'https://img.youtube.com/vi/'
+                                        . $queryParams['v']
+                                        . '/0.jpg';
+                                }
+                            }
+                        }
+                        $this->firebaseNotificationService->sendToTopic(
+                            'all',
+                            $record->title,
+                            $this->trimToWords($record->summary, 20),
+                            [
+                                'type' => empty($record->video_url)
+                                    ? 'article'
+                                    : 'video',
+
+                                'id' => (string)$record->id,
+
+                                'live_url' => '',
+
+                                'slug' => (string)$record->slug,
+
+                                'image_url' => $imageUrl
+                            ]
+                        );
+                    } catch (\Throwable $e) {
+
+                        /*
+                     * Notification failure should not cause
+                     * the breaking-news selection to fail.
+                     */
+                        log_message(
+                            'error',
+                            'Breaking news notification failed for post '
+                                . $record->id . ': '
+                                . $e->getMessage()
+                        );
+                    }
                 }
             }
 
-            return $inserted;
+            return true;
         }
 
         return false;
     }
-
     /**
      * Retrieves active selections for a specific post
      */
@@ -258,5 +440,22 @@ class PostSelectionModel extends Model
         }
 
         return $totalDeleted;
+    }
+
+    protected function trimToWords(?string $text, int $maxWords = 20): string
+    {
+        $text = trim((string)$text);
+
+        if ($text === '') {
+            return '';
+        }
+
+        $words = preg_split('/\s+/', $text);
+
+        if (count($words) <= $maxWords) {
+            return $text;
+        }
+
+        return implode(' ', array_slice($words, 0, $maxWords)) . '...';
     }
 }

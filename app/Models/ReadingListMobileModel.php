@@ -81,11 +81,11 @@ public function getUserReadingList(
             p.slug,
             p.summary,
             p.content,
-            p.image_id,
             p.image_url,
             p.video_url,
             p.category_id,
             p.lang_id,
+            p.post_url,
             p.created_at as post_created_at,
 
             u.id as author_id,
