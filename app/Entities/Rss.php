@@ -24,6 +24,7 @@ class Rss extends Entity
         'feed_url'                     => 'string',
         'image_saving_method'          => 'string',
         'read_more_button_text'        => 'string',
+        'district'                     => 'string',
         'last_checked_at'              => 'datetime',
         'created_at'                   => 'datetime'
     ];

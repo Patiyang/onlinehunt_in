@@ -7,7 +7,7 @@ use App\Entities\Rss;
 class RssModel extends BaseModel
 {
     protected $table = 'rss_feeds';
-    protected $allowedFields = ['lang_id', 'feed_name', 'feed_url', 'post_limit', 'category_id', 'image_saving_method', 'auto_update', 'read_more_button', 'read_more_button_text',
+    protected $allowedFields = ['lang_id', 'feed_name', 'feed_url', 'post_limit', 'category_id','district', 'image_saving_method', 'auto_update', 'read_more_button', 'read_more_button_text',
         'add_posts_as_draft', 'generate_keywords_from_title', 'user_id', 'image_id', 'last_checked_at', 'created_at'];
     protected $returnType = Rss::class;
     protected $createdField = 'created_at';

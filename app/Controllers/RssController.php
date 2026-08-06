@@ -43,7 +43,7 @@ class RssController extends BaseAdminController
     {
         if (isPostMethod()) {
             $postData = $this->request->getPost();
-
+            // $postData['district'] = $this->request->getPost('district');
             $postData['user_id'] = user()->id;
 
             $feed = new \App\Entities\Rss();
@@ -92,7 +92,8 @@ class RssController extends BaseAdminController
 
         if (isPostMethod()) {
             $postData = $this->request->getPost();
-
+// $postData['district'] = $this->request->getPost('district');
+        echo($postData['district']);
             $feed->fill($postData);
 
             $feed->processForm($postData);

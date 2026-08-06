@@ -7,7 +7,7 @@ use App\Entities\Post;
 class PostModel extends BaseModel
 {
     protected $table = 'posts';
-    protected $allowedFields = ['lang_id', 'title', 'slug', 'guid', 'summary', 'content', 'category_id', 'image_id', 'optional_url', 'pageviews', 'comment_count', 'need_auth', 'slider_order', 'featured_order',
+    protected $allowedFields = ['lang_id', 'title', 'slug', 'guid', 'summary', 'content', 'category_id','district', 'image_id', 'optional_url', 'pageviews', 'comment_count', 'need_auth', 'slider_order', 'featured_order',
         'is_scheduled', 'visibility', 'full_width_post', 'post_format', 'image_url', 'video_id', 'video_url', 'video_embed_code', 'user_id', 'status', 'feed_id', 'post_url', 'show_post_url', 'image_description',
         'show_item_numbers', 'is_poll_public', 'link_list_style', 'recipe_info', 'post_data', 'extra_data', 'meta_title', 'meta_keywords', 'meta_description', 'faq', 'scheduled_at', 'is_premium', 'is_exclusive',
         'exclusive_price', 'event_start_date', 'event_end_date', 'updated_at', 'created_at'];

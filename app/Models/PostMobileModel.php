@@ -15,7 +15,7 @@ class PostMobileModel extends Model
     public function getPosts($limit = 10, $offset = 0, $langId = null)
     {
         $builder = $this->db->table('posts p')
-            ->select('p.id, p.title, p.slug, p.summary, p.content, p.meta_keywords,p.pageviews,p.video_id,p.video_url, p.comment_count, p.image_url, p.created_at,
+            ->select('p.id, p.title, p.slug, p.summary, p.content,p.district, p.meta_keywords,p.pageviews,p.video_id,p.video_url, p.comment_count, p.image_url, p.created_at,
                   u.id as user_id, u.username, u.slug as user_slug, u.email, u.avatar, u.cover_image, u.about_me, u.last_seen,
                   c.id as category_id, c.name as category_name, c.slug as category_slug, c.description as category_description,c.meta_title, c.color,
                   f.id as feed_id, f.feed_name,f.feed_url')
@@ -152,7 +152,7 @@ class PostMobileModel extends Model
         if ($isVideo) {
             $builder->where('p.video_id IS NOT NULL', null, false);
         }
-   
+
         $total = $builder->countAllResults(false);
 
         $posts = $builder

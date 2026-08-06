@@ -59,6 +59,7 @@ class CategoryController extends ResourceController
                 'image_url'     => $row->image_url,
                 'created_at'    => $row->created_at,
                 'pageviews'     => (int)$row->pageviews,
+                'district'      => $row->district,
                 'video_id'      => $row->video_id == null ? null : (int)$row->video_id,
                 'video_url'     => $row->video_url ?? null,
                 'comment_count' => (int)$row->comment_count,

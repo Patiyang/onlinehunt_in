@@ -45,6 +45,7 @@ class PostController extends BaseController
                 'image_url'     => $row->image_url,
                 'video_url'     => $row->video_url,
                 'created_at'    => $row->created_at,
+                'district'      => $row->district,
                 'pageviews'     => (int)$row->pageviews,
                 'feed_id'       => (int)$row->feed_id,
                 'video_id'      => $row->video_id ?? null,

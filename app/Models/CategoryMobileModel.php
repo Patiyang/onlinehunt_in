@@ -71,7 +71,7 @@ class CategoryMobileModel extends Model
         if ($category) {
             $builder = $this->db->table('posts p')
                 ->select('p.id, p.title, p.slug, p.summary, p.content, p.meta_keywords,
-                      p.pageviews, p.video_id, p.video_url, p.comment_count, p.image_url, p.created_at,
+                      p.pageviews, p.video_id, p.video_url, p.comment_count, p.image_url, p.created_at,p.district,
                       u.id as user_id, u.username, u.slug as user_slug, u.email, u.avatar,
                       u.cover_image, u.about_me, u.last_seen')
                 ->join('users u', 'u.id = p.user_id', 'left')
@@ -131,7 +131,7 @@ class CategoryMobileModel extends Model
         if ($category) {
             $builder = $this->db->table('posts p')
                 ->select('p.id, p.title, p.slug, p.summary, p.content, p.meta_keywords,
-                      p.pageviews, p.video_id, p.video_url, p.comment_count, p.image_url, p.created_at,
+                      p.pageviews, p.video_id, p.video_url, p.comment_count, p.image_url, p.created_at,p.district,
                       u.id as user_id, u.username, u.slug as user_slug, u.email, u.avatar,
                       u.cover_image, u.about_me, u.last_seen')
                 ->join('users u', 'u.id = p.user_id', 'left')

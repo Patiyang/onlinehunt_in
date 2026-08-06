@@ -97,6 +97,7 @@ class RssService
                 $post->content = $content;
                 $post->summary = $description;
                 $post->image_url = $imageUrl;
+                $post->district = $feed->district;
                 $post->post_url = (string)($item['permalink'] ?? '');
                 $post->category_id = (int)$feed->category_id;
                 $post->post_format = 'article';
@@ -137,7 +138,6 @@ class RssService
 
                 $stats['added']++;
                 $counter++;
-
             } catch (Exception $e) {
                 $stats['errors']++;
                 $stats['messages'][] = "Error '{$item['title']}': " . $e->getMessage();
@@ -218,7 +218,6 @@ class RssService
             $image = $imageModel->create($uploadedImage, $userId);
 
             return !empty($image) ? (int)$image->id : null;
-
         } catch (Throwable $e) {
             log_message('error', '[RSS Import] Image processing failed: ' . $e->getMessage());
             return null;
@@ -261,8 +260,8 @@ class RssService
 
         // Check for supported image extensions
         return preg_match(
-                '/\.(jpg|jpeg|png|gif|svg|webp|bmp|avif|ico|tiff?)$/i',
-                (string)$path
-            ) === 1;
+            '/\.(jpg|jpeg|png|gif|svg|webp|bmp|avif|ico|tiff?)$/i',
+            (string)$path
+        ) === 1;
     }
 }

@@ -36,6 +36,7 @@ class Post extends Entity
         'post_data'         => 'json',
         'extra_data'        => 'json',
         'faq'               => 'json',
+        'district'          => 'string',
         'title'             => 'string',
         'slug'              => 'string',
         'guid'              => 'string',
@@ -307,7 +308,6 @@ class Post extends Entity
             'event_date'            => $formData['event_start_date'] ?? '',
             'registration_deadline' => $formData['registration_deadline'] ?? ''
         ];
-
     }
 
     /**
@@ -339,7 +339,6 @@ class Post extends Entity
                 $this->is_scheduled = 0;
                 $this->scheduled_at = null;
             }
-
         } else {
             // Insert new record
             if (!empty($isDraft)) {

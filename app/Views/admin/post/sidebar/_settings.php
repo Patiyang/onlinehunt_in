@@ -7,11 +7,44 @@ $needAuth = (int)old('need_auth', $post?->need_auth ?? 0);
 $showItemNumbers = (int)old('show_item_numbers', $post?->show_item_numbers ?? 1);
 $isScheduled = (int)old('is_scheduled', $post?->is_scheduled ?? 0);
 $isDraft = (int)old('is_draft', ($post?->status ?? 0) === 1 ? 0 : 1);
-
+$selectedDistrict = old('district') ?? $post?->district ?? '';
 $isSlider = old('is_slider', in_array('slider', $postSelections) ? 1 : 0);
 $isFeatured = old('is_featured', in_array('featured', $postSelections) ? 1 : 0);
 $isBreaking = old('is_breaking', in_array('breaking_news', $postSelections) ? 1 : 0);
 $isRecommended = old('is_recommended', in_array('recommended', $postSelections) ? 1 : 0);
+
+$districts = [
+    "Bagalkot",
+    "Ballari (Bellary)",
+    "Belagavi (Belgaum)",
+    "Bengaluru (Bangalore) Rural",
+    "Bengaluru (Bangalore) Urban",
+    "Bidar",
+    "Chamarajanagar",
+    "Chikballapur",
+    "Chikkamagaluru (Chikmagalur)",
+    "Chitradurga",
+    "Dakshina Kannada",
+    "Davangere",
+    "Dharwad",
+    "Gadag",
+    "Hassan",
+    "Haveri",
+    "Kalaburagi (Gulbarga)",
+    "Kodagu",
+    "Kolar",
+    "Koppal",
+    "Mandya",
+    "Mysuru (Mysore)",
+    "Raichur",
+    "Ramanagara",
+    "Shivamogga (Shimoga)",
+    "Tumakuru (Tumkur)",
+    "Udupi",
+    "Uttara Kannada (Karwar)",
+    "Vijayapura (Bijapur)",
+    "Yadgir"
+];
 ?>
 
     <div class="card card-flush py-4">
@@ -42,7 +75,32 @@ $isRecommended = old('is_recommended', in_array('recommended', $postSelections) 
                             'selectorInitialData'  => !empty($categorySelectorData) ? $categorySelectorData : null,
                     ]); ?>
                 </div>
+    <div class="fv-row">
+                        <label class="form-label"><?='District' /* trans("district") */; ?></label>
 
+                        <select name="district"
+                            id="district"
+                            class="form-select"
+                            data-kt-select2="true"
+                            data-placeholder="<?= trans("select_an_option", "attr"); ?>"
+                            data-allow-clear="true"
+                            data-hide-search="false">
+
+                            <option value=""></option>
+
+                            <?php
+
+
+                            foreach ($districts as $district):
+                            ?>
+                                <option value="<?= esc($district); ?>"
+                                    <?= $selectedDistrict === $district ? 'selected' : ''; ?>>
+                                    <?= esc($district); ?>
+                                </option>
+                            <?php endforeach; ?>
+
+                        </select>
+                    </div>
                 <?php if (!empty($post) && hasPermission('manage_all_posts')):
                     $author = getUserById((int)$post->user_id); ?>
                     <div class="mb-6 fv-row">
