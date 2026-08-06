@@ -45,6 +45,7 @@ class CategoryController extends ResourceController
 
         foreach ($rows as $row) {
             $keywordsArray = [];
+
             if (!empty($row->keywords)) {
                 $keywordsArray = array_map('trim', explode(',', $row->keywords));
             }
@@ -63,7 +64,8 @@ class CategoryController extends ResourceController
                 'video_id'      => $row->video_id == null ? null : (int)$row->video_id,
                 'video_url'     => $row->video_url ?? null,
                 'comment_count' => (int)$row->comment_count,
-                'author'        => [
+
+                'author' => [
                     'id'          => (int)$row->user_id,
                     'username'    => $row->username,
                     'slug'        => $row->user_slug,
@@ -73,15 +75,16 @@ class CategoryController extends ResourceController
                     'about_me'    => $row->about_me,
                     'last_seen'   => $row->last_seen,
                 ],
-
             ];
 
             // Handle include filtering
             if (!empty($include)) {
                 $filtered = [];
+
                 foreach ($include as $field) {
                     if (strpos($field, '.') !== false) {
                         [$parent, $child] = explode('.', $field, 2);
+
                         if (isset($post[$parent][$child])) {
                             $filtered[$parent][$child] = $post[$parent][$child];
                         }
@@ -89,6 +92,7 @@ class CategoryController extends ResourceController
                         $filtered[$field] = $post[$field];
                     }
                 }
+
                 $post = $filtered;
             }
 
@@ -97,7 +101,9 @@ class CategoryController extends ResourceController
                 foreach ($exclude as $field) {
                     if (strpos($field, '.') !== false) {
                         [$parent, $child] = explode('.', $field, 2);
+
                         unset($post[$parent][$child]);
+
                         if (isset($post[$parent]) && empty($post[$parent])) {
                             unset($post[$parent]);
                         }
@@ -115,68 +121,110 @@ class CategoryController extends ResourceController
 
 
     /**
-     * List all categories (paginated)
-     * Example: /api/categories?limit=10&page=2
+     * List all categories
+     *
+     * Example:
+     * /api/categories?limit=10&page=2&lang_id=1
      */
     public function index()
     {
         $limit = (int) ($this->request->getGet('limit') ?? 10);
         $page  = (int) ($this->request->getGet('page') ?? 1);
-        $lang_id = (int) ($this->request->getGet('lang_id') ?? 1); // Default to English if not provided
+        $lang_id = (int) ($this->request->getGet('lang_id') ?? 1);
+
         $offset = ($page - 1) * $limit;
 
-        $categories = $this->categoryMobileModel->getCategories($limit, $offset, $lang_id);
+        $categories = $this->categoryMobileModel->getCategories(
+            $limit,
+            $offset,
+            $lang_id
+        );
 
         return $this->response->setJSON($categories);
     }
 
+
     /**
-     * Get category by ID with posts (paginated)
-     * Example: /api/categories/1?limit=5&page=2
+     * Get category by ID with posts
+     *
+     * Example:
+     * /api/categories/1?limit=5&page=2&lang_id=1&district=Bagalkot
      */
     public function show($id = null)
     {
         $limit = (int) ($this->request->getGet('limit') ?? 10);
         $page  = (int) ($this->request->getGet('page') ?? 1);
         $lang_id = (int) ($this->request->getGet('lang_id') ?? 1);
-        $is_video = $this->request->getGet('is_video') ? (bool)$this->request->getGet('is_video') : null;
+
+        $is_video = $this->request->getGet('is_video')
+            ? (bool)$this->request->getGet('is_video')
+            : null;
+
+        $district = $this->request->getGet('district');
+
         $offset = ($page - 1) * $limit;
 
         $filters = $this->parseFilters();
 
-        $category = $this->categoryMobileModel->getCategoryById($id, $limit, $offset, $lang_id, $is_video);
+        $category = $this->categoryMobileModel->getCategoryById(
+            $id,
+            $limit,
+            $offset,
+            $lang_id,
+            $is_video,
+            $district
+        );
 
         if (!$category) {
             return $this->failNotFound('Category not found');
         }
+
         if (!empty($category->posts)) {
-            $category->posts = $this->formatPosts($category->posts, $filters);
+            $category->posts = $this->formatPosts(
+                $category->posts,
+                $filters
+            );
         }
+
         return $this->response->setJSON($category);
     }
 
+
     /**
-     * Get category by slug with posts (paginated)
-     * Example: /api/categories/slug/sports?limit=5&page=3
+     * Get category by slug with posts
+     *
+     * Example:
+     * /api/categories/slug/sports?limit=5&page=3&lang_id=1&district=Bagalkot
      */
     public function bySlug($slug = null)
     {
         $limit = (int) ($this->request->getGet('limit') ?? 10);
         $page  = (int) ($this->request->getGet('page') ?? 1);
         $lang_id = (int) ($this->request->getGet('lang_id') ?? 1);
+
+        $district = $this->request->getGet('district');
+
         $offset = ($page - 1) * $limit;
 
         $filters = $this->parseFilters();
 
-        $category = $this->categoryMobileModel->getCategoryBySlug($slug, $limit, $offset, $lang_id);
+        $category = $this->categoryMobileModel->getCategoryBySlug(
+            $slug,
+            $limit,
+            $offset,
+            $lang_id,
+            $district
+        );
 
         if (!$category) {
             return $this->failNotFound('Category not found');
         }
 
-        // Apply formatting on posts if they exist
         if (!empty($category->posts)) {
-            $category->posts = $this->formatPosts($category->posts, $filters);
+            $category->posts = $this->formatPosts(
+                $category->posts,
+                $filters
+            );
         }
 
         return $this->response->setJSON($category);

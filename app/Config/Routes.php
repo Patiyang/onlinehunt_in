@@ -548,6 +548,11 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
     $routes->get('reading-list/status', 'ReadingListController::status');
 
     $routes->get('reading-list', 'ReadingListController::index');
+
+    //user
+
+    $routes->get('user', 'UserController::profile');
+    $routes->put('user', 'UserController::update');
 });
 
 // $routes->get('test', 'HomeController::test');

@@ -8,7 +8,7 @@ class AuthMobileModel extends Model
 {
     protected $table      = 'users';
     protected $primaryKey = 'id';
-    protected $allowedFields = ['username', 'email', 'password', 'avatar', 'cover_image', 'slug', 'token', 'about_me', 'last_seen'];
+    protected $allowedFields = ['username', 'email', 'password', 'avatar', 'cover_image', 'slug', 'auth_token', 'about_me', 'last_seen'];
     protected $returnType = 'array';
 
     protected $builder;

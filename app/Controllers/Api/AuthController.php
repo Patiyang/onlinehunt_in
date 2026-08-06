@@ -55,7 +55,7 @@ class AuthController extends BaseController
 
         return $this->response->setJSON([
             'user'  => $user,
-            'token' => $sessionKey
+            'token' => $user['auth_token']
         ]);
     }
 

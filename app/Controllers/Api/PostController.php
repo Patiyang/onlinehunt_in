@@ -139,10 +139,11 @@ class PostController extends BaseController
         $page  = (int) $this->request->getGet('page') ?: 1;
         $limit = (int) $this->request->getGet('limit') ?: 10;
         $lang_id = (int) ($this->request->getGet('lang_id') ?? 1);
+        $district = $this->request->getGet('district');
         $offset = ($page - 1) * $limit;
 
         $filters = $this->parseFilters();
-        $rows = $this->postMobileModel->getPosts($limit, $offset, $lang_id);
+        $rows = $this->postMobileModel->getPosts($limit, $offset, $lang_id,$district);
         $posts = $this->formatPosts($rows['data'], $filters);
 
         return $this->respond([
@@ -204,11 +205,12 @@ class PostController extends BaseController
         $page  = (int) $this->request->getGet('page') ?: 1;
         $limit = (int) $this->request->getGet('limit') ?: 10;
         $lang_id = (int) ($this->request->getGet('lang_id') ?? 1);
+        $district = $this->request->getGet('district');
         $is_video = $this->request->getGet('is_video') ? (bool)$this->request->getGet('is_video') : null;
         $offset = ($page - 1) * $limit;
 
         $filters = $this->parseFilters();
-        $rows = $this->postMobileModel->getPostsByCategory($categoryId, $limit, $offset, $lang_id, $is_video);
+        $rows = $this->postMobileModel->getPostsByCategory($categoryId, $limit, $offset, $lang_id, $is_video,$district);
         $posts = $this->formatPosts($rows['data'], $filters);
 
         return $this->respond([
@@ -229,12 +231,13 @@ class PostController extends BaseController
         $page  = (int) $this->request->getGet('page') ?: 1;
         $limit = (int) $this->request->getGet('limit') ?: 10;
         $lang_id = (int) ($this->request->getGet('lang_id') ?? 1);
+        $district = $this->request->getGet('district');
         $is_video = $this->request->getGet('is_video') ? (bool)$this->request->getGet('is_video') : null;
 
         $offset = ($page - 1) * $limit;
 
         $filters = $this->parseFilters();
-        $rows = $this->postMobileModel->getPostsBySelection($type, $limit, $offset, $lang_id, $is_video);
+        $rows = $this->postMobileModel->getPostsBySelection($type, $limit, $offset, $lang_id, $is_video,$district);
         $posts = $this->formatPosts($rows['data'], $filters);
 
         return $this->respond([
@@ -274,7 +277,8 @@ class PostController extends BaseController
             $currentPost->category_id,
             $currentPost->lang_id,
             $limit,
-            $offset
+            $offset,
+             $currentPost->district
         );
 
         // Apply filters
