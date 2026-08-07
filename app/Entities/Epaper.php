@@ -14,7 +14,7 @@ class Epaper extends Entity
         'title' => '?string',
 
         // 'issue_date' => 'date',
-
+        'district'=>'?string',
         'source_type' => 'string',
 
         'pdf_file' => '?string',

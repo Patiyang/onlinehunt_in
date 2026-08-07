@@ -21,6 +21,7 @@ class EpaperModel extends BaseModel
         'website_url',
         'cover_image',
         'is_featured',
+        'district',
         'status',
         'total_views',
         'sort_order',

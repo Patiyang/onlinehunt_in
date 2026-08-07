@@ -19,12 +19,21 @@ class EpaperController extends ResourceController
      */
     protected function getRequestParams(): array
     {
+        $district = trim((string) $this->request->getGet('district'));
+
+        $district = match ($district) {
+            '', 'null', 'NULL', 'all' => null,
+            default => $district,
+        };
+
         return [
-            'langId' => (int)($this->request->getGet('lang_id') ?? 1),
-            'page'   => max(1, (int)($this->request->getGet('page') ?? 1)),
-            'limit'  => max(1, (int)($this->request->getGet('limit') ?? 20)),
+            'langId'  => (int)($this->request->getGet('lang_id') ?? 1),
+            'page'    => max(1, (int)($this->request->getGet('page') ?? 1)),
+            'limit'   => max(1, (int)($this->request->getGet('limit') ?? 20)),
+            'district' => $district,
         ];
     }
+
 
     /**
      * GET /api/epapers/newspapers/websites
@@ -41,21 +50,27 @@ class EpaperController extends ResourceController
                 $params['page'],
                 $params['limit'],
                 null,
-                null
+                null,
+                $params['district']
             )
         );
     }
+
+
     /**
      * GET /api/epapers/newspapers
      */
     public function newspapers()
     {
         $params = $this->getRequestParams();
+
         $source_type = trim((string) $this->request->getGet('source_type'));
+
         $source_type = match ($source_type) {
             '', 'null', 'NULL', 'all' => null,
             default => $source_type,
         };
+
         return $this->response->setJSON(
             $this->epaperModel->getIssues(
                 ['newspaper'],
@@ -64,10 +79,13 @@ class EpaperController extends ResourceController
                 $params['page'],
                 $params['limit'],
                 null,
-                null
+                null,
+                $params['district']
             )
         );
     }
+
+
     /**
      * GET /api/epapers/newspapers/pdfs
      */
@@ -83,10 +101,12 @@ class EpaperController extends ResourceController
                 $params['page'],
                 $params['limit'],
                 null,
-                null
+                null,
+                $params['district']
             )
         );
     }
+
 
     /**
      * GET /api/epapers/periodicals
@@ -96,13 +116,16 @@ class EpaperController extends ResourceController
     public function periodicals()
     {
         $params = $this->getRequestParams();
+
         $frequency = $this->request->getGet('frequency');
-        // $source_type = $this->request->getGet('source_type');
+
         $source_type = trim((string) $this->request->getGet('source_type'));
+
         $source_type = match ($source_type) {
             '', 'null', 'NULL', 'all' => null,
             default => $source_type,
         };
+
         return $this->response->setJSON(
             $this->epaperModel->getIssues(
                 [
@@ -114,10 +137,13 @@ class EpaperController extends ResourceController
                 $params['langId'],
                 $params['page'],
                 $params['limit'],
-                $frequency
+                $frequency,
+                null,
+                $params['district']
             )
         );
     }
+
 
     /**
      * GET /api/epapers/magazines
@@ -125,6 +151,7 @@ class EpaperController extends ResourceController
     public function magazines()
     {
         $params = $this->getRequestParams();
+
         $categoryId = (int)$this->request->getGet('category_id');
 
         return $this->response->setJSON(
@@ -135,11 +162,16 @@ class EpaperController extends ResourceController
                 $params['page'],
                 $params['limit'],
                 null,
-                $categoryId
+                $categoryId,
+                $params['district']
             )
         );
     }
-    //get the categories containing magazines
+
+
+    /**
+     * GET /api/epapers/magazine-categories
+     */
     public function magazineCategories()
     {
         $params = $this->getRequestParams();
@@ -150,17 +182,25 @@ class EpaperController extends ResourceController
             )
         );
     }
-    // get featured epapers
+
+
+    /**
+     * GET /api/epapers/featured
+     */
     public function featured()
     {
         $params = $this->getRequestParams();
 
         return $this->response->setJSON(
             $this->epaperModel->getFeaturedIssues(
-                $params['langId']
+                $params['langId'],
+                $params['limit'],
+                $params['district']
             )
         );
     }
+
+
     /**
      * GET /api/publications/{id}/issues
      */
@@ -173,12 +213,16 @@ class EpaperController extends ResourceController
                 (int)$publicationId,
                 $params['langId'],
                 $params['page'],
-                $params['limit']
+                $params['limit'],
+                $params['district']
             )
         );
     }
 
 
+    /**
+     * GET /api/epapers/{id}
+     */
     public function issue($id)
     {
         $params = $this->getRequestParams();

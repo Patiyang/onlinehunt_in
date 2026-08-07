@@ -71,7 +71,7 @@ class EpaperMobileModel extends Model
 
             'website_url' => $row->website_url,
             'source_type' => $row->source_type,
-
+            'district' => $row->district,
             'issue_date' => $row->issue_date,
             'sort_order' => (int)$row->sort_order,
             'is_today' => (bool)$row->is_today,
@@ -109,7 +109,8 @@ class EpaperMobileModel extends Model
         int $page = 1,
         int $limit = 20,
         ?string $frequency = null,
-        ?int $categoryid = null
+        ?int $categoryid = null,
+        ?string $district = null
     ): array {
 
         $page = max(1, $page);
@@ -131,7 +132,9 @@ class EpaperMobileModel extends Model
         if (!empty($sourceType)) {
             $builder->where('e.source_type', $sourceType);
         }
-
+        if (!empty($district)) {
+            $builder->where('e.district', $district);
+        }
         $total = $builder->countAllResults(false);
 
         $builder->limit($limit, $offset);
@@ -157,7 +160,8 @@ class EpaperMobileModel extends Model
         int $publicationId,
         int $langId = 1,
         int $page = 1,
-        int $limit = 20
+        int $limit = 20,
+        ?string $district = null
     ): array {
 
         $page = max(1, $page);
@@ -169,7 +173,9 @@ class EpaperMobileModel extends Model
 
         $builder->where('e.publication_id', $publicationId);
         $builder->where('p.lang_id', $langId);
-
+        if (!empty($district)) {
+            $builder->where('e.district', $district);
+        }
         $total = $builder->countAllResults(false);
 
         $builder->limit($limit, $offset);
@@ -242,13 +248,17 @@ class EpaperMobileModel extends Model
     }
     public function getFeaturedIssues(
         int $langId = 1,
-        int $limit = 10
+        int $limit = 10,
+        ?string $district = null
     ): array {
         $builder = $this->baseQuery();
 
         $builder->where('e.is_featured', 1);
         $builder->where('p.lang_id', $langId);
-
+        
+        if (!empty($district)) {
+            $builder->where('e.district', $district);
+        }
         $builder->limit($limit);
 
         return [
@@ -273,6 +283,7 @@ class EpaperMobileModel extends Model
             e.pdf_file,
             e.source_type,
             e.issue_date,
+            e.district,
             e.is_today,
             e.sort_order,
             e.total_views,
@@ -327,6 +338,8 @@ class EpaperMobileModel extends Model
                 'source_type' => $row->source_type,
 
                 'website_url' => $row->website_url,
+
+                'district' => $row->district,
 
                 'pdf_file' => empty($row->pdf_file)
                     ? null

@@ -5,7 +5,39 @@
 $sourceType = old('source_type', $issue->source_type ?? 'pdf');
 // $publication->category = model('CategoryModel')->find($publication->category_id);
 $selectedLangId = old('lang_id') ?? $publication?->lang_id ?? $activeLang?->id ?? 1;
-
+$selectedDistrict = old('district', $issue->district ?? '');
+$districts = [
+    "Bagalkot",
+    "Ballari (Bellary)",
+    "Belagavi (Belgaum)",
+    "Bengaluru (Bangalore) Rural",
+    "Bengaluru (Bangalore) Urban",
+    "Bidar",
+    "Chamarajanagar",
+    "Chikballapur",
+    "Chikkamagaluru (Chikmagalur)",
+    "Chitradurga",
+    "Dakshina Kannada",
+    "Davangere",
+    "Dharwad",
+    "Gadag",
+    "Hassan",
+    "Haveri",
+    "Kalaburagi (Gulbarga)",
+    "Kodagu",
+    "Kolar",
+    "Koppal",
+    "Mandya",
+    "Mysuru (Mysore)",
+    "Raichur",
+    "Ramanagara",
+    "Shivamogga (Shimoga)",
+    "Tumakuru (Tumkur)",
+    "Udupi",
+    "Uttara Kannada (Karwar)",
+    "Vijayapura (Bijapur)",
+    "Yadgir"
+];
 ?>
 
 <form action="<?= $action; ?>"
@@ -72,7 +104,29 @@ $selectedLangId = old('lang_id') ?? $publication?->lang_id ?? $activeLang?->id ?
                         required>
 
                 </div>
+                <div class="mb-8">
+                    <label class="required form-label">
+                        District
+                    </label>
+                    <select
+                        name="district"
+                        id="district"
+                        class="form-select">
 
+                        <option value="">All Districts</option>
+
+                        <?php foreach ($districts as $district): ?>
+
+                            <option
+                                value="<?= esc($district); ?>"
+                                <?= $selectedDistrict === $district ? 'selected' : ''; ?>>
+                                <?= esc($district); ?>
+                            </option>
+
+                        <?php endforeach; ?>
+
+                    </select>
+                </div>
                 <div class="mb-8">
 
                     <label class="required form-label">
