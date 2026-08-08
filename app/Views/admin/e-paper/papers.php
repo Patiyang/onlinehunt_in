@@ -60,19 +60,19 @@
 
                     <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
 
-                        <th width="80">Cover</th>
+                        <th width="80"><?= trans('cover'); ?></th>
 
-                        <th>Issue</th>
+                        <th><?= trans('issue'); ?></th>
 
-                        <th width="140">Issue Date</th>
+                        <th width="140"><?= trans('issue_date'); ?></th>
 
-                        <th width="120">Source</th>
+                        <th width="120"><?= trans('source'); ?></th>
 
-                        <th width="100">Featured</th>
+                        <th width="100"><?= trans('featured'); ?></th>
 
-                        <th width="100">Views</th>
+                        <th width="100"><?= trans('views'); ?></th>
 
-                        <th width="100">Status</th>
+                        <th width="100"><?= trans('status'); ?></th>
 
                         <th class="text-end" width="80">
                             <?= trans('options'); ?>
@@ -132,7 +132,7 @@
 
                                         <span class="badge badge-light-danger">
 
-                                            PDF
+                                            <?= trans('pdf'); ?>
 
                                         </span>
 
@@ -140,7 +140,7 @@
 
                                         <span class="badge badge-light-success">
 
-                                            Website
+                                                <?= trans('website'); ?>
 
                                         </span>
 
@@ -154,7 +154,7 @@
 
                                         <span class="badge badge-light-success">
 
-                                            Yes
+                                            <?= trans('yes'); ?>
 
                                         </span>
 
@@ -162,7 +162,7 @@
 
                                         <span class="badge badge-light-secondary">
 
-                                            No
+                                            <?= trans('no'); ?>
 
                                         </span>
 

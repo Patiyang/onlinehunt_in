@@ -37,10 +37,13 @@
                 <thead>
                     <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
                         <th class="min-w-20px"><?= trans('id'); ?></th>
-                        <th class="min-w-250px">Publication</th>
-                        <th class="min-w-140px">Type</th>
+                        <th class="min-w-250px"> <?= trans('publication'); ?>
+                        </th>
+                        <th class="min-w-140px"> <?= trans('type'); ?>
+                        </th>
                         <th class="min-w-120px"><?= trans('language'); ?></th>
-                        <th class="min-w-80px text-center">Issues</th>
+                        <th class="min-w-80px text-center"> <?= trans('issues'); ?>
+                        </th>
                         <th class="min-w-140px"><?= trans('date_added'); ?></th>
                         <th class="text-end min-w-70px"><?= trans('options'); ?></th>
                     </tr>
@@ -70,7 +73,7 @@
 
                                 <td>
                                     <span class="badge badge-light-primary">
-                                        <?= ucwords(str_replace('_', ' ', $item->publication_type)); ?>
+                                        <?= ucwords(str_replace('_', ' ',  trans($item->publication_type))); ?>
                                     </span>
                                 </td>
 
@@ -81,7 +84,15 @@
                                 <td class="text-center">
                                     <a href="<?= adminUrl('publications/' . $item->id . '/issues'); ?>"
                                         class="badge badge-light-primary">
-                                        <?= (int)$item->issue_count; ?> Issues
+
+                                        <?= (int)$item->issue_count; ?>
+                                        <?= trans('issues'); ?>
+
+                                        <i class="ki-duotone ki-arrow-right fs-7 ms-1">
+                                            <span class="path1"></span>
+                                            <span class="path2"></span>
+                                        </i>
+
                                     </a>
                                 </td>
 

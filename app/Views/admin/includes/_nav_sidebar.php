@@ -140,7 +140,7 @@
                 <a class="menu-link" href="<?= adminUrl('live-news'); ?>">
                     <span class="menu-icon">
                         <i class="fa-solid fa-video"></i> </span>
-                    <span class="menu-title">Live news</span>
+                    <span class="menu-title"><?= trans("live_news"); ?></span>
                 </a>
             </div>
         <?php endif; ?>
@@ -149,7 +149,7 @@
                 <a class="menu-link" href="<?= adminUrl('publications'); ?>">
                     <span class="menu-icon">
                         <i class="fa-solid fa-newspaper"></i> </span>
-                    <span class="menu-title">Publications</span>
+                    <span class="menu-title"><?= trans("publications"); ?></span>
                 </a>
             </div>
         <?php endif; ?>

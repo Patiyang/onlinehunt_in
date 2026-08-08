@@ -70,7 +70,9 @@ $selectedLangId = old('lang_id') ?? $publication?->lang_id ?? $activeLang?->id ?
                     <div class="fv-row ">
 
                         <label class="required form-label">
-                            Publication Type
+                            <!-- Publication Type -->
+                            <?= trans('type'); ?>
+
                         </label>
 
                         <select name="publication_type"
@@ -94,7 +96,7 @@ $selectedLangId = old('lang_id') ?? $publication?->lang_id ?? $activeLang?->id ?
                                 <option value="<?= $key; ?>"
                                     <?= $selected == $key ? 'selected' : ''; ?>>
 
-                                    <?= $label; ?>
+                                    <?= trans($key); ?>
 
                                 </option>
 
@@ -107,7 +109,8 @@ $selectedLangId = old('lang_id') ?? $publication?->lang_id ?? $activeLang?->id ?
                     <div class="fv-row">
 
                         <label class="form-label">
-                            Sort Order
+                            <!-- Sort Order -->
+                            <?= trans('sort_order'); ?>
                         </label>
 
                         <input type="number"
@@ -120,19 +123,22 @@ $selectedLangId = old('lang_id') ?? $publication?->lang_id ?? $activeLang?->id ?
                     <div class="fv-row">
 
                         <label class="form-label">
-                            Status
+                            <?= trans('status'); ?>
+
                         </label>
 
                         <select name="status" class="form-select">
 
                             <option value="1"
                                 <?= old('status', $publication->status ?? 1) == 1 ? 'selected' : ''; ?>>
-                                Active
+                                <?= trans('active'); ?>
+
                             </option>
 
                             <option value="0"
                                 <?= old('status', $publication->status ?? 1) == 0 ? 'selected' : ''; ?>>
-                                Disabled
+                                <?= trans('disabled'); ?>
+
                             </option>
 
                         </select>
@@ -162,7 +168,8 @@ $selectedLangId = old('lang_id') ?? $publication?->lang_id ?? $activeLang?->id ?
                 <div class="mb-6 fv-row">
 
                     <label class="required form-label">
-                        Publication Name
+                        <?= trans('title'); ?>
+
                     </label>
 
                     <input type="text"
@@ -178,7 +185,8 @@ $selectedLangId = old('lang_id') ?? $publication?->lang_id ?? $activeLang?->id ?
                 <div class="mb-6 fv-row">
 
                     <label class="form-label">
-                        Slug
+                        <?= trans('slug'); ?>
+
                     </label>
 
                     <input type="text"
@@ -194,7 +202,7 @@ $selectedLangId = old('lang_id') ?? $publication?->lang_id ?? $activeLang?->id ?
                 <div class="mb-6 fv-row">
 
                     <label class="form-label">
-                        Website URL
+                        <?= trans('website_url'); ?>
                     </label>
 
                     <input type="url"
@@ -209,7 +217,8 @@ $selectedLangId = old('lang_id') ?? $publication?->lang_id ?? $activeLang?->id ?
                 <div class="mb-6 fv-row">
 
                     <label class="form-label">
-                        Description
+                        <?= trans('description'); ?>
+
                     </label>
 
                     <textarea name="description"
@@ -223,7 +232,8 @@ $selectedLangId = old('lang_id') ?? $publication?->lang_id ?? $activeLang?->id ?
                 <div class="mb-6 fv-row">
 
                     <label class="form-label">
-                        Keywords
+                        <?= trans('keywords'); ?>
+
                     </label>
 
                     <input type="text"

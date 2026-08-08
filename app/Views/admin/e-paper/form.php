@@ -64,7 +64,7 @@ $districts = [
                 <div class="mb-8">
 
                     <label class="form-label fw-bold">
-                        Publication
+                        <?= trans('publication'); ?>
                     </label>
 
                     <div class="form-control form-control-solid">
@@ -93,7 +93,7 @@ $districts = [
                 <div class="mb-8">
 
                     <label class="required form-label">
-                        Issue Date
+                        <?= trans('issue_date'); ?>
                     </label>
 
                     <input
@@ -106,7 +106,7 @@ $districts = [
                 </div>
                 <div class="mb-8">
                     <label class="required form-label">
-                        District
+                        <?= trans('district'); ?>
                     </label>
                     <select
                         name="district"
@@ -130,7 +130,7 @@ $districts = [
                 <div class="mb-8">
 
                     <label class="required form-label">
-                        Source Type
+                            <?= trans('source_type'); ?>
                     </label>
 
                     <select
@@ -139,11 +139,11 @@ $districts = [
                         class="form-select">
 
                         <option value="pdf" <?= $sourceType == 'pdf' ? 'selected' : ''; ?>>
-                            PDF
+                            <?= trans('pdf'); ?>
                         </option>
 
                         <option value="website" <?= $sourceType == 'website' ? 'selected' : ''; ?>>
-                            Website
+                            <?= trans('website'); ?>
                         </option>
 
                     </select>
@@ -153,7 +153,7 @@ $districts = [
                 <div class="mb-8">
 
                     <label class="form-label">
-                        Featured
+                        <?= trans('featured'); ?>
                     </label>
 
                     <select
@@ -177,7 +177,7 @@ $districts = [
                 <div class="mb-8">
 
                     <label class="form-label">
-                        Status
+                        <?= trans('status'); ?>
                     </label>
 
                     <select
@@ -186,12 +186,12 @@ $districts = [
 
                         <option value="1"
                             <?= old('status', $issue->status ?? 1) == 1 ? 'selected' : ''; ?>>
-                            Active
+                            <?= trans('active'); ?>
                         </option>
 
                         <option value="0"
                             <?= old('status', $issue->status ?? 1) == 0 ? 'selected' : ''; ?>>
-                            Disabled
+                            <?= trans('disabled'); ?>
                         </option>
 
                     </select>
@@ -201,7 +201,7 @@ $districts = [
                 <div>
 
                     <label class="form-label">
-                        Sort Order
+                       <?= trans('sort_order'); ?>
                     </label>
 
                     <input
@@ -228,7 +228,7 @@ $districts = [
 
                 <div class="card-title">
 
-                    <h2>Issue Details</h2>
+                    <h2><?= trans('issue_details'); ?></h2>
 
                 </div>
 
@@ -239,7 +239,7 @@ $districts = [
                 <div class="mb-6">
 
                     <label class="form-label">
-                        Title
+                        <?= trans('title'); ?>
                     </label>
 
                     <input
@@ -256,7 +256,7 @@ $districts = [
                     <div class="mb-6">
 
                         <label class="form-label">
-                            PDF File
+                            <?= trans('pdf_file'); ?>
                         </label>
 
                         <input
@@ -272,7 +272,7 @@ $districts = [
                                 <a href="<?= base_url($issue->pdf_file); ?>"
                                     target="_blank">
 
-                                    View Current PDF
+                                   <?= trans('view_pdf'); ?>
 
                                 </a>
 
@@ -289,7 +289,7 @@ $districts = [
                     <div class="mb-6">
 
                         <label class="form-label">
-                            Website URL
+                            <?= trans('website_url'); ?>
                         </label>
 
                         <input
@@ -305,7 +305,8 @@ $districts = [
                 <div class="mb-6">
 
                     <label class="form-label">
-                        Cover Image
+                        <?= trans('cover_image'); ?>
+                        
                     </label>
 
                     <input
@@ -341,7 +342,7 @@ $districts = [
 
                 <?= !empty($issue)
                     ? trans('save_changes')
-                    : 'Add Issue'; ?>
+                    : trans('add_issue'); ?>
 
             </button>
 
