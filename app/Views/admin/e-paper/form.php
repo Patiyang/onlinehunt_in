@@ -36,7 +36,8 @@ $districts = [
     "Udupi",
     "Uttara Kannada (Karwar)",
     "Vijayapura (Bijapur)",
-    "Yadgir"
+    "Yadgir",
+    "Vijayanagara"
 ];
 ?>
 

@@ -42,7 +42,8 @@ $districts = [
     "Udupi",
     "Uttara Kannada (Karwar)",
     "Vijayapura (Bijapur)",
-    "Yadgir"
+    "Yadgir",
+    "Vijayanagara"
 ];
 if (!empty($defaultImage)) {
     $defaultImgUrl = getStorageFileUrl($defaultImage->image_mid, $defaultImage->storage);
