@@ -81,7 +81,11 @@ class UserController extends BaseController
         }
 
         if (empty($updateData)) {
-            return $this->failValidationError('No fields to update');
+            // return $this->failValidationError('No fields to update');
+              return $this->respond([
+                'status'  => 'error',
+                'message' => 'No fields to update'
+            ], 400);
         }
 
         $updated = $this->userMobileModel->updateUserProfile(
@@ -133,5 +137,95 @@ class UserController extends BaseController
         $user = $authModel->where('auth_token', $token)->first();
 
         return $user['id'] ?? null;
+    }
+
+    //profile upload
+
+    public function uploadProfileImage()
+    {
+        // Get authenticated user
+        $userId = $this->getAuthenticatedUserId();
+
+        if (!$userId) {
+            return $this->respond([
+                'status'  => 'error',
+                'message' => 'Unauthenticated'
+            ], 401);
+        }
+
+        // Get uploaded file
+        $file = $this->request->getFile('image');
+
+        if (!$file || !$file->isValid()) {
+            return $this->respond([
+                'status'  => 'error',
+                'message' => 'No valid image was uploaded'
+            ], 400);
+        }
+
+        // Validate image type
+        $allowedTypes = [
+            'image/jpeg',
+            'image/png',
+            'image/webp'
+        ];
+
+        if (!in_array($file->getMimeType(), $allowedTypes, true)) {
+            return $this->respond([
+                'status'  => 'error',
+                'message' => 'Only JPG, PNG and WebP images are allowed'
+            ], 400);
+        }
+
+        // Optional: 5 MB maximum
+        if ($file->getSize() > 5 * 1024 * 1024) {
+            return $this->respond([
+                'status'  => 'error',
+                'message' => 'Image must not exceed 5 MB'
+            ], 400);
+        }
+
+        // Current year/month
+        $folder = date('Ym');
+
+        // uploads/profile/202607
+        $uploadPath = FCPATH . 'uploads/profile/' . $folder;
+
+        // Create directory if it doesn't exist
+        if (!is_dir($uploadPath)) {
+            if (!mkdir($uploadPath, 0755, true)) {
+                return $this->respond([
+                    'status'  => 'error',
+                    'message' => 'Unable to create upload directory'
+                ], 500);
+            }
+        }
+
+        // Generate unique filename
+        $extension = $file->getExtension();
+
+        $filename = 'profile_' .
+            bin2hex(random_bytes(16)) .
+            '.' . $extension;
+
+        // Move file
+        if (!$file->move($uploadPath, $filename)) {
+            return $this->respond([
+                'status'  => 'error',
+                'message' => 'Failed to upload image'
+            ], 500);
+        }
+
+        // Relative path stored in database
+        $relativePath = 'uploads/profile/' . $folder . '/' . $filename;
+
+        return $this->respond([
+            'status' => 'success',
+            'message' => 'Profile image uploaded successfully',
+            'data' => [
+                'image' => $relativePath,
+                'url'   => base_url($relativePath)
+            ]
+        ]);
     }
 }

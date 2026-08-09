@@ -143,7 +143,7 @@ class PostController extends BaseController
         $offset = ($page - 1) * $limit;
 
         $filters = $this->parseFilters();
-        $rows = $this->postMobileModel->getPosts($limit, $offset, $lang_id,$district);
+        $rows = $this->postMobileModel->getPosts($limit, $offset, $lang_id, $district);
         $posts = $this->formatPosts($rows['data'], $filters);
 
         return $this->respond([
@@ -210,7 +210,7 @@ class PostController extends BaseController
         $offset = ($page - 1) * $limit;
 
         $filters = $this->parseFilters();
-        $rows = $this->postMobileModel->getPostsByCategory($categoryId, $limit, $offset, $lang_id, $is_video,$district);
+        $rows = $this->postMobileModel->getPostsByCategory($categoryId, $limit, $offset, $lang_id, $is_video, $district);
         $posts = $this->formatPosts($rows['data'], $filters);
 
         return $this->respond([
@@ -237,7 +237,7 @@ class PostController extends BaseController
         $offset = ($page - 1) * $limit;
 
         $filters = $this->parseFilters();
-        $rows = $this->postMobileModel->getPostsBySelection($type, $limit, $offset, $lang_id, $is_video,$district);
+        $rows = $this->postMobileModel->getPostsBySelection($type, $limit, $offset, $lang_id, $is_video, $district);
         $posts = $this->formatPosts($rows['data'], $filters);
 
         return $this->respond([
@@ -278,7 +278,7 @@ class PostController extends BaseController
             $currentPost->lang_id,
             $limit,
             $offset,
-             $currentPost->district
+            $currentPost->district
         );
 
         // Apply filters
@@ -324,6 +324,89 @@ class PostController extends BaseController
         return $this->respond([
             'status'  => 'success',
             'message' => 'Pageview added'
+        ]);
+    }
+
+    public function search()
+    {
+        $query = trim((string)$this->request->getGet('q'));
+
+        // Minimum search length
+        if (mb_strlen($query) < 3) {
+            return $this->respond([
+                'status'  => 'error',
+                'message' => 'Search query must be at least 3 characters long'
+            ], 400);
+        }
+
+        $page = max(
+            1,
+            (int)$this->request->getGet('page')
+        );
+
+        $limit = max(
+            1,
+            (int)$this->request->getGet('limit')
+        );
+
+        $lang_id = (int)(
+            $this->request->getGet('lang_id') ?? 1
+        );
+
+        $district = trim(
+            (string)$this->request->getGet('district')
+        );
+
+        $district = $district === ''
+            ? null
+            : $district;
+
+        $categoryId = $this->request->getGet('category_id');
+
+        $categoryId = (
+            $categoryId !== null &&
+            $categoryId !== ''
+        )
+            ? (int)$categoryId
+            : null;
+
+        $isVideoParam = $this->request->getGet('is_video');
+
+        $isVideo = null;
+
+        if ($isVideoParam !== null) {
+            $isVideo = filter_var(
+                $isVideoParam,
+                FILTER_VALIDATE_BOOLEAN,
+                FILTER_NULL_ON_FAILURE
+            );
+        }
+
+        $offset = ($page - 1) * $limit;
+
+        $filters = $this->parseFilters();
+
+        $rows = $this->postMobileModel->searchPosts(
+            $query,
+            $limit,
+            $offset,
+            $lang_id,
+            $district,
+            $categoryId,
+            $isVideo
+        );
+
+        $posts = $this->formatPosts(
+            $rows['data'],
+            $filters
+        );
+
+        return $this->respond([
+            'status' => 'success',
+            'page'   => $page,
+            'limit'  => $limit,
+            'data'   => $posts,
+            'meta'   => $rows['meta']
         ]);
     }
 }

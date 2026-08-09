@@ -486,7 +486,9 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
 
     // Page views
     $routes->post('posts/(:num)/pageview', 'PostController::addPageview/$1');
+    //search
 
+    $routes->get('search/post', 'PostController::search');
     //login+reg
 
     $routes->post('auth/login', 'AuthController::login');
@@ -553,6 +555,8 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
 
     $routes->get('user', 'UserController::profile');
     $routes->put('user', 'UserController::update');
+
+    $routes->post('profile/image', 'UserController::uploadProfileImage');
 });
 
 // $routes->get('test', 'HomeController::test');
