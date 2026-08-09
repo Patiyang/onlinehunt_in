@@ -26,7 +26,7 @@
 
                         <i class="ki-duotone ki-plus fs-2"></i>
 
-                        Add Issue
+                        <?= trans('add_issue'); ?>
 
                     </a>
 
