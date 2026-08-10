@@ -49,7 +49,14 @@ class CategoryController extends ResourceController
             if (!empty($row->keywords)) {
                 $keywordsArray = array_map('trim', explode(',', $row->keywords));
             }
-
+            $defaultImage = null;
+            $defaultImgUrl = '';
+            if (!empty((int)$row->feed_image)) {
+                $defaultImage = model('ImageModel')->find((int)$row->feed_image);
+            }
+            if (!empty($defaultImage)) {
+                $defaultImgUrl = getStorageFileUrl($defaultImage->image_mid, $defaultImage->storage);
+            }
             $post = [
                 'id'            => (int)$row->id,
                 'title'         => $row->title,
@@ -75,6 +82,12 @@ class CategoryController extends ResourceController
                     'about_me'    => $row->about_me,
                     'last_seen'   => $row->last_seen,
                 ],
+                'feed'      => [
+                    'id'          => (int)$row->feed_id,
+                    'name'        => $row->feed_name,
+                    'feed_url'      => $row->feed_url,
+                    'feed_image' => $defaultImgUrl /* (int)$row->feed_image */
+                ]
             ];
 
             // Handle include filtering

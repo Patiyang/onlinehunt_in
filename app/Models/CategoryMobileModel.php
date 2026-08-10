@@ -90,8 +90,10 @@ class CategoryMobileModel extends Model
                   p.pageviews, p.video_id, p.video_url, p.comment_count,
                   p.image_url, p.created_at, p.district,
                   u.id as user_id, u.username, u.slug as user_slug,
-                  u.email, u.avatar, u.cover_image, u.about_me, u.last_seen')
+                  u.email, u.avatar, u.cover_image, u.about_me, u.last_seen,
+                  f.id as feed_id, f.feed_name, f.feed_url,f.image_id as feed_image')
             ->join('users u', 'u.id = p.user_id', 'left')
+            ->join('rss_feeds f', 'f.id = p.feed_id', 'left')
             ->where('p.status', 1)
             ->where('p.visibility', 1)
             ->where('p.category_id', $id)
@@ -167,8 +169,10 @@ class CategoryMobileModel extends Model
                   p.pageviews, p.video_id, p.video_url, p.comment_count,
                   p.image_url, p.created_at, p.district,
                   u.id as user_id, u.username, u.slug as user_slug,
-                  u.email, u.avatar, u.cover_image, u.about_me, u.last_seen')
+                  u.email, u.avatar, u.cover_image, u.about_me, u.last_seen,
+                  f.id as feed_id, f.feed_name, f.feed_url,f.image_id as feed_image')
             ->join('users u', 'u.id = p.user_id', 'left')
+            ->join('rss_feeds f', 'f.id = p.feed_id', 'left')
             ->where('p.status', 1)
             ->where('p.visibility', 1)
             ->where('p.category_id', $category->id)
