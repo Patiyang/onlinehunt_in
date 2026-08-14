@@ -23,7 +23,7 @@ class EpaperMobileModel extends Model
         p.title AS publication_title,
         p.slug AS publication_slug,
         p.description AS publication_description,
-        p.website_url,
+        p.website_url AS publication_url, 
         p.logo,
         p.logo AS publication_cover,
         p.publication_type,
@@ -89,6 +89,7 @@ class EpaperMobileModel extends Model
                     ? null
                     : $row->publication_cover,
                 'publication_type' => $row->publication_type,
+                'publication_url'=>$row->publication_url
                 // 'frequency' => $row->frequency,
             ],
 
@@ -161,7 +162,8 @@ class EpaperMobileModel extends Model
         int $langId = 1,
         int $page = 1,
         int $limit = 20,
-        ?string $district = null
+        ?string $district = null,
+        ?string $sourceType = null
     ): array {
 
         $page = max(1, $page);
@@ -175,6 +177,9 @@ class EpaperMobileModel extends Model
         $builder->where('p.lang_id', $langId);
         if (!empty($district)) {
             $builder->where('e.district', $district);
+        }
+         if (!empty($sourceType)) {
+            $builder->where('e.source_type', $sourceType);
         }
         $total = $builder->countAllResults(false);
 

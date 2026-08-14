@@ -25,12 +25,19 @@ class EpaperController extends ResourceController
             '', 'null', 'NULL', 'all' => null,
             default => $district,
         };
+   $sourceType = trim((string) $this->request->getGet('source_type'));
+
+        $sourceType = match ($sourceType) {
+            '', 'null', 'NULL', 'all' => null,
+            default => $sourceType,
+        };
 
         return [
             'langId'  => (int)($this->request->getGet('lang_id') ?? 1),
             'page'    => max(1, (int)($this->request->getGet('page') ?? 1)),
             'limit'   => max(1, (int)($this->request->getGet('limit') ?? 20)),
             'district' => $district,
+            'source_type'=>$sourceType
         ];
     }
 
@@ -214,7 +221,8 @@ class EpaperController extends ResourceController
                 $params['langId'],
                 $params['page'],
                 $params['limit'],
-                $params['district']
+                $params['district'],
+                 $params['source_type']
             )
         );
     }
