@@ -296,7 +296,7 @@ $districts = [
                             type="url"
                             name="website_url"
                             class="form-control"
-                            value="<?= old('website_url', $issue->website_url ?? ''); ?>" required>
+                            value="<?= old('website_url', $issue->website_url ?? ''); ?>">
 
                     </div>
 
