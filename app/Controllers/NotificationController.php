@@ -93,7 +93,7 @@ class NotificationController extends BaseAdminController
                 $message,
                 [
                     'type'      => 'notification',
-                    'id'        => '',
+                    'id'        => '0',
                     'live_url'  => '',
                     'slug'      => '',
                     'image_url' => $imageUrl
