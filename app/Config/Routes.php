@@ -152,6 +152,11 @@ $routes->group($customRoutes->admin, ['filter' => 'auth'], function ($routes) {
     // $routes->get('epapers/(:num)', 'EpaperController::epaperNews/$1');
     // $routes->match(['GET', 'POST'], 'epapers/add', 'EpaperController::addEpaperNews');
     // $routes->match(['GET', 'POST'], 'epaper-news/edit/(:num)', 'EpaperController::editEpaperNews/$1');
+
+    //Notifications
+    $routes->get('notifications', 'NotificationController::index');
+    $routes->post('notifications/send', 'NotificationController::send');
+    
     // Categories
     $routes->get('categories', 'CategoryController::categories');
     $routes->match(['GET', 'POST'], 'categories/add', 'CategoryController::addCategory');

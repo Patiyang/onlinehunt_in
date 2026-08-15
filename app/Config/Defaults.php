@@ -321,6 +321,7 @@ class Defaults extends BaseConfig
         'admin_panel',
         'add_post',
         'epaper',
+        'notifications',
         'live',
         'manage_all_posts',
         'navigation',

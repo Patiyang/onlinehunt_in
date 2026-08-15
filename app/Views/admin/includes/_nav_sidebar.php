@@ -153,6 +153,15 @@
                 </a>
             </div>
         <?php endif; ?>
+         <?php if (hasPermission('notification')): ?>
+            <div class="menu-item">
+                <a class="menu-link" href="<?= adminUrl('notifications'); ?>">
+                    <span class="menu-icon">
+                        <i class="fa-solid fa-bell"></i> </span>
+                    <span class="menu-title"><?= trans("notifications"); ?></span>
+                </a>
+            </div>
+        <?php endif; ?>
         <?php if (hasPermission('categories')): ?>
             <div class="menu-item">
                 <a class="menu-link" href="<?= adminUrl('categories'); ?>">
