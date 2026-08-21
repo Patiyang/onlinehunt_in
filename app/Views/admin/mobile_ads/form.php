@@ -242,7 +242,8 @@ $selectedLangId = old('lang_id') ?? $mobileAd?->lang_id ?? $activeLang?->id ?? 1
                     <input type="text"
                         name="ad_title"
                         class="form-control"
-                        value="<?= esc(old('ad_title', $mobileAd->ad_title ?? '')); ?>">
+                        value="<?= esc(old('ad_title', $mobileAd->ad_title ?? '')); ?>"
+                        required>
 
                     <?= validationError('ad_title'); ?>
 
@@ -253,14 +254,14 @@ $selectedLangId = old('lang_id') ?? $mobileAd?->lang_id ?? $activeLang?->id ?? 1
                 <div class="mb-6 fv-row">
 
                     <label class="form-label">
-                        <?= trans('slug'); ?>
+                        <?= trans('slug'); ?> (<?= trans('optional'); ?>)
                     </label>
 
                     <input type="text"
                         name="slug"
                         class="form-control"
                         value="<?= esc(old('slug', $mobileAd->slug ?? '')); ?>"
-                        required>
+                        >
 
                     <?= validationError('slug'); ?>
 
@@ -292,7 +293,8 @@ $selectedLangId = old('lang_id') ?? $mobileAd?->lang_id ?? $activeLang?->id ?? 1
                     <input type="text"
                         name="button_text"
                         class="form-control"
-                        value="<?= esc(old('button_text', $mobileAd->button_text ?? '')); ?>">
+                        value="<?= esc(old('button_text', $mobileAd->button_text ?? '')); ?>"
+                        required>
 
                     <?= validationError('button_text'); ?>
 
@@ -309,7 +311,8 @@ $selectedLangId = old('lang_id') ?? $mobileAd?->lang_id ?? $activeLang?->id ?? 1
                     <input type="url"
                         name="url"
                         class="form-control"
-                        value="<?= esc(old('url', $mobileAd->url ?? '')); ?>">
+                        value="<?= esc(old('url', $mobileAd->url ?? '')); ?>"
+                        required>
 
                     <?= validationError('url'); ?>
 
@@ -342,7 +345,8 @@ $selectedLangId = old('lang_id') ?? $mobileAd?->lang_id ?? $activeLang?->id ?? 1
                     <input type="file"
                         name="image"
                         class="form-control"
-                        accept="image/*">
+                        accept="image/*"
+                        required>
 
                     <?php if (!empty($mobileAd->image)): ?>
 
