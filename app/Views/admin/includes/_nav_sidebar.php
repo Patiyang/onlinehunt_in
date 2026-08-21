@@ -162,6 +162,15 @@
                 </a>
             </div>
         <?php endif; ?>
+          <?php if (hasPermission('notification')): ?>
+            <div class="menu-item">
+                <a class="menu-link" href="<?= adminUrl('mobile-ads'); ?>">
+                    <span class="menu-icon">
+                        <i class="fa-brands fa-adversal"></i></span>
+                    <span class="menu-title"><?= trans("mobile_ads"); ?></span>
+                </a>
+            </div>
+        <?php endif; ?>
         <?php if (hasPermission('categories')): ?>
             <div class="menu-item">
                 <a class="menu-link" href="<?= adminUrl('categories'); ?>">

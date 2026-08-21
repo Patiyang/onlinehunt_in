@@ -156,7 +156,13 @@ $routes->group($customRoutes->admin, ['filter' => 'auth'], function ($routes) {
     //Notifications
     $routes->get('notifications', 'NotificationController::index');
     $routes->post('notifications/send', 'NotificationController::send');
-    
+
+    // Mobile Ads
+    $routes->get('mobile-ads', 'MobileAdController::mobileAds');
+    $routes->match(['get', 'post'], 'mobile-ads/add', 'MobileAdController::addMobileAd');
+    $routes->match(['get', 'post'], 'mobile-ads/edit/(:num)', 'MobileAdController::editMobileAd/$1');
+    $routes->post('mobile-ads/delete', 'MobileAdController::deleteMobileAd');
+
     // Categories
     $routes->get('categories', 'CategoryController::categories');
     $routes->match(['GET', 'POST'], 'categories/add', 'CategoryController::addCategory');
@@ -562,6 +568,12 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
     $routes->put('user', 'UserController::update');
 
     $routes->post('profile/image', 'UserController::uploadProfileImage');
+
+    //mobile-ads
+
+    $routes->get('mobile-ads', 'MobileAdController::index'); // ?limit=10&offset=0&lang_id=1
+    $routes->get('mobile-ads/(:num)', 'MobileAdController::showOne/$1');
+    $routes->get('mobile-ads/slug/(:segment)', 'MobileAdController::showBySlug/$1'); // ?lang_id=1
 });
 
 // $routes->get('test', 'HomeController::test');
