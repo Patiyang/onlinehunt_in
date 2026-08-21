@@ -153,7 +153,7 @@
                 </a>
             </div>
         <?php endif; ?>
-         <?php if (hasPermission('notification')): ?>
+        <?php if (hasPermission('notification')): ?>
             <div class="menu-item">
                 <a class="menu-link" href="<?= adminUrl('notifications'); ?>">
                     <span class="menu-icon">
@@ -162,7 +162,7 @@
                 </a>
             </div>
         <?php endif; ?>
-          <?php if (hasPermission('notification')): ?>
+        <?php if (hasPermission('notification')): ?>
             <div class="menu-item">
                 <a class="menu-link" href="<?= adminUrl('mobile-ads'); ?>">
                     <span class="menu-icon">
@@ -404,7 +404,15 @@
                 </a>
             </div>
         <?php endif; ?>
-
+  <?php if (hasPermission('ad_spaces')): ?>
+            <div class="menu-item">
+                <a class="menu-link" href="<?= adminUrl('mobile-ads'); ?>">
+                    <span class="menu-icon">
+                        <i class="fa-brands fa-adversal"></i></span>
+                    <span class="menu-title"><?= trans("mobile_ads"); ?></span>
+                </a>
+            </div>
+        <?php endif; ?>
         <?php if ($config->reward_system_status == 1 && user()->reward_system == 1): ?>
             <div class="menu-item">
                 <a class="menu-link" href="<?= adminUrl('author-earnings'); ?>">
